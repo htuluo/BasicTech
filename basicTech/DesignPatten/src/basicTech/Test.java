@@ -9,6 +9,9 @@ public class Test {
 		String dd = "dssss";
 		System.out.println(integer.hashCode());
 		System.out.println(dd.hashCode());
+		System.out.println(new Integer("2") == 2);
+		System.out.println(new Integer("226").equals(226));
+		System.out.println(new Integer("999").equals(999));
 
            // 初始化Bean1
 		Bean1 bean1 = (new Test()).new Bean1();
