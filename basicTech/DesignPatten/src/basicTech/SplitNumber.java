@@ -11,6 +11,9 @@ public class SplitNumber {
 		for (int i = 2; i < nInteger / 2; i++) {
 			if (2 * nInteger % i == 0 && (2 * nInteger / i + 1 - i) % 2 == 0) {
 				Integer a1 = (2 * nInteger / i + 1 - i) / 2;
+				if (a1 == 0) {
+					continue;
+				}
 				for (int j = 0; j < i; j++) {
 					System.out.print(a1);
 					a1++;
