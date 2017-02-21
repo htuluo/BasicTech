@@ -1,6 +1,5 @@
 package ThreadPackage;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,7 +12,7 @@ import javax.security.auth.x500.X500Principal;
  *
  * */
 
-class StringBuffer {
+class StringBuffer2 {
 
 	// 创建锁对象
 	final Lock lock = new ReentrantLock();
@@ -32,6 +31,8 @@ class StringBuffer {
 	// 定义计数器
 	int count;
 
+//	public StringBuffer s;
+
 	// 生产线程
 	public void put(Object x) throws InterruptedException {
 		lock.lock();
@@ -39,11 +40,13 @@ class StringBuffer {
 			while(count == arr.length)
 				notFull.await();
 			arr[count] = x;
-			System.err.println("put"+x.toString());
+			System.err.println(Thread.currentThread().getName()+"put"+x.toString());
+			System.out.println("-------------");
+			System.out.println(arr);
 			if (++putper == arr.length) {
 				putper = 0;
 			}
-			count++;
+			++count;
 			notEmpty.signal();
 		}finally {
 			lock.unlock();
@@ -58,11 +61,12 @@ class StringBuffer {
 			while(count == 0)
 				notEmpty.await();
 			Object x = arr[takeper];
-			System.err.println("take" + x);
+			System.err.println(Thread.currentThread().getName()+"take"+x.toString());
+			System.out.println(arr);
 			if (++takeper == arr.length) {
 				takeper = 0;
 			}
-			count--;
+			--count;
 			notFull.signal();
 			return x;
 
@@ -70,66 +74,65 @@ class StringBuffer {
 			lock.unlock();
 		}
 	}
-
 }
 
-class Put implements Runnable {
-	private StringBuffer stringBuffer;
-	public Put(StringBuffer stringbuff) {
-		this.stringBuffer = stringbuff;
+class Prod extends StringBuffer implements Runnable {
+	private StringBuffer s;
+	public Prod(StringBuffer s) {
+		this.s = s;
 	}
 
 	@Override
 	public void run() {
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < arr.length; i++) {
 			try {
-				stringBuffer.put(i);
-				Thread.sleep(100);
+				put(i);
 			} catch (InterruptedException e) {
+
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 }
 
-class Take implements Runnable {
-	private StringBuffer stringBuffer;
-
-	public Take(StringBuffer stringbuff) {
-
-		this.stringBuffer = stringbuff;
+class Cus extends StringBuffer implements Runnable {
+	private StringBuffer s;
+	public Cus(StringBuffer s) {
+		this.s = s;
 	}
 
 	@Override
 	public void run() {
-		while (true) {
-			try {
-				Thread.sleep(1000);
-				stringBuffer.take();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			if (count!=0) {
+				System.out.println(take());
 			}
-		}
 
+		} catch (InterruptedException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 }
 
-public class ConditionDemo {
+public class ConditionDemo2 {
 
 	public static void main(String[] args) throws InterruptedException {
-		StringBuffer sb = new StringBuffer();
+		StringBuffer s = new StringBuffer();
+		Prod pro = new Prod(s);
+		Cus cus = new Cus(s);
 
-		Put put = new Put(sb);
-		Thread t1 = new Thread(put);
-		Take take = new Take(sb);
-		Thread t2 = new Thread(take);
+		Thread t1 = new Thread(pro);
+		Thread t2 = new Thread(pro);
+		Thread t3 = new Thread(cus);
+		Thread t4 = new Thread(cus);
+
 		t1.start();
 		t2.start();
-
+		t3.start();
+		t4.start();
 
 	}
 
