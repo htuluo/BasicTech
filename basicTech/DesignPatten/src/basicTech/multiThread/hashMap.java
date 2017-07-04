@@ -1,29 +1,56 @@
 package basicTech.multiThread;
 
-public  class hashMap{
+public class hashMap {
 
-    class  Node{
-    private  String key;
-    private  Object value;
-    private  Node next;
+  static   class Node {
+        private String key;
+        private Object value;
+        private Node next;
+    }
 
+    private int capacity = 10;
+    private Node[] nodes = new Node[capacity];
+
+
+    public void put(String key, Object value) {
+        Node node = new Node();
+        node.key = key;
+        node.value = value;
+        int hash = key.hashCode() % capacity;
+        if (nodes[hash] != null) {
+            Node tmpNode = nodes[hash].next;
+            while (tmpNode.next != null) {
+                tmpNode = tmpNode.next;
+            }
+            tmpNode.next = node;
+        } else {
+            nodes[hash] = node;
+        }
 
     }
-    private  int capacity=10;
-    private  Node[] nodes=new  Node[capacity];
 
-
- /*   public  put(String key,Object value){
-        Node node=new Node();
-        node.key=key;
-        node.value=value;
-        nodes.
-
-    }*/
-
+    public  Object take(String key){
+        int hash = key.hashCode() % capacity;
+        if (nodes[hash]!=null){
+            Node tmpNode=nodes[hash];
+          do {
+                if (tmpNode.key.equals(key)){
+                    return  tmpNode.value;
+                }
+                tmpNode=tmpNode.next;
+            }  while (tmpNode.next!=null);
+            return  null;
+        }else {
+            return null;
+        }
+    }
 
 
     public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis()/1000);
+        hashMap hashMap=new hashMap();
+        hashMap.put("ddd","bbb");
+        hashMap.put("aaa","ccc");
+        System.out.println(hashMap.take("ddd"));
+        System.out.println(System.currentTimeMillis() / 1000);
     }
 }

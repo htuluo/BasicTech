@@ -43,9 +43,9 @@ public class BlockQueueTest {
                     for (Integer i = 0; i < 10; i++) {
 
                         test.enQueue(i + "22");
-                        Thread.sleep(60);
+//                        Thread.sleep(60);
                         if (i==6){
-                            Thread.sleep(100);
+                            Thread.sleep(1000);
                         }
                         System.out.println("put i=" + i.toString());
                     }
