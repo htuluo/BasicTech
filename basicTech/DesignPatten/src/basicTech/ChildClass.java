@@ -1,9 +1,21 @@
 package basicTech;
 
+import javax.sound.midi.Soundbank;
+
 public class ChildClass extends ParentClass {
 	private Integer childInteger;
+	private Integer sameInteger;
+
+	public Integer getSameInteger() {
+		return sameInteger;
+	}
+
+	public void setSameInteger(Integer sameInteger) {
+		this.sameInteger = sameInteger;
+	}
+
 	{
-		System.out.println("Children init");
+		System.out.println("Children init"+this.sameInteger);
 	}
 
 	static {
@@ -19,7 +31,8 @@ public class ChildClass extends ParentClass {
 
 	public static void main(String[] args) {
 
-		new ChildClass();
+		ChildClass childClass = new ChildClass();
+		System.out.println(childClass.getSameInteger());
 		// System.out.println(sChildClass.getChildInteger());
 		// System.out.println(sChildClass.getParentInteger());
 	}

@@ -2,8 +2,9 @@ package basicTech;
 
 public class ParentClass {
 	private Integer parentInteger;
+	private Integer sameInteger=5;
 	{
-		System.out.println("Parent init");
+		System.out.println("Parent init"+this.sameInteger);
 	}
 
 	static {
