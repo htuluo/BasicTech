@@ -92,5 +92,7 @@ public class ConditionTest {
                 }
             }
         }).start();
+    System.exit(0);
+
     }
 }
