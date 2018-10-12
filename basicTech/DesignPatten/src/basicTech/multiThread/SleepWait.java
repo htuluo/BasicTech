@@ -59,8 +59,8 @@ public class SleepWait {
         Service service = sleepWait.new Service();
         Thread threadA = new Thread(sleepWait.new SleepThread(service));
         Thread threadB = new Thread(sleepWait.new WaitThread(service));
-        threadB.start();
         threadA.start();
+        threadB.start();
 
 
     }
