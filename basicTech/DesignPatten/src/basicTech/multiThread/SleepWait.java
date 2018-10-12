@@ -28,10 +28,10 @@ public class SleepWait {
         }
     }
 
-    public class SleepThread implements Runnable {
+    public class SleepRunnable implements Runnable {
         private Service service;
 
-        public SleepThread(Service service) {
+        public SleepRunnable(Service service) {
             this.service = service;
         }
 
@@ -41,10 +41,35 @@ public class SleepWait {
         }
     }
 
-    public class WaitThread implements Runnable {
+    public class SleepThread extends Thread{
         private Service service;
 
-        public WaitThread(Service service) {
+        public Service getService() {
+            return service;
+        }
+
+        public void setService(Service service) {
+            this.service = service;
+        }
+
+        @Override
+        public void run() {
+//            super.run();
+            synchronized (this.service) {
+                System.out.println("thread run,当前时间："+System.currentTimeMillis());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class WaitRunnable implements Runnable {
+        private Service service;
+
+        public WaitRunnable(Service service) {
             this.service = service;
         }
 
@@ -57,10 +82,13 @@ public class SleepWait {
     public static void main(String[] args) {
         SleepWait sleepWait = new SleepWait();
         Service service = sleepWait.new Service();
-        Thread threadA = new Thread(sleepWait.new SleepThread(service));
-        Thread threadB = new Thread(sleepWait.new WaitThread(service));
+        Thread threadA = new Thread(sleepWait.new SleepRunnable(service));
+        Thread threadB = new Thread(sleepWait.new WaitRunnable(service));
+        SleepThread threadC =  sleepWait.new SleepThread();
+        threadC.setService(service);
         threadA.start();
         threadB.start();
+        threadC.start();
 
 
     }
