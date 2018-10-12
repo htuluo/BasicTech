@@ -1,6 +1,6 @@
 package basicTech.multiThread;
 
-public class hashMap {
+public class MHashMap {
 
   static   class Node {
         private String key;
@@ -47,10 +47,10 @@ public class hashMap {
 
 
     public static void main(String[] args) {
-        hashMap hashMap=new hashMap();
-        hashMap.put("ddd","bbb");
-        hashMap.put("aaa","ccc");
-        System.out.println(hashMap.take("ddd"));
+        MHashMap mHashMap =new MHashMap();
+        mHashMap.put("ddd","bbb");
+        mHashMap.put("aaa","ccc");
+        System.out.println(mHashMap.take("ddd"));
         System.out.println(System.currentTimeMillis() / 1000);
     }
 }
