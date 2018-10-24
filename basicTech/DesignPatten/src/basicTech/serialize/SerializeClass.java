@@ -39,4 +39,24 @@ public class SerializeClass implements Serializable{
     public void setStr1(String str1) {
         this.str1 = str1;
     }
+
+    private void writeObject(java.io.ObjectOutputStream stream) throws  Exception{
+        System.out.println("使用自己的序列化方式");
+        stream.defaultWriteObject();
+        stream.writeInt(str1.length());
+        for (int i=0;i<str1.length();i++){
+            stream.writeChar(str1.charAt(i));
+        }
+    }
+
+    private void readObject(java.io.ObjectInputStream stream) throws Exception{
+        System.out.println("使用自己的反序列化方式");
+        stream.defaultReadObject();
+        int length = stream.readInt();
+        char[] chars=new char[length];
+        for (int i=0;i<length;i++){
+            chars[i]=stream.readChar();
+        }
+        str1=new String(chars,0,length);
+    }
 }
