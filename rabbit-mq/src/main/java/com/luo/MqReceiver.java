@@ -36,20 +36,20 @@ public class MqReceiver {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 //                String routingKey=envelope.getRoutingKey();
 //                String contentType=properties.getContentType();
-//                long deliverTag=envelope.getDeliveryTag();
+                long deliverTag=envelope.getDeliveryTag();
                 System.out.println(new String(body, "utf-8"));
-//                channel.basicAck(deliverTag,true);
+                channel.basicAck(deliverTag,true);
             }
         };
 //        consumer.handleDelivery();
-        String s = channel.basicConsume(QUEUE_NAME, false, "myconsumerTag", consumer);
+        String s = channel.basicConsume(QUEUE_NAME, false, consumer);
         long start = System.currentTimeMillis();
 //        for (int i = 0; i < 1000; i++) {
 //
 //            consumer.handleDelivery("222");
 //        }
         System.out.println(s + (System.currentTimeMillis() - start));
-        channel.close();
-        connection.close();
+//        channel.close();
+//        connection.close();
     }
 }
