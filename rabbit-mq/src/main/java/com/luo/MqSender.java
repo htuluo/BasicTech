@@ -15,7 +15,7 @@ import java.util.concurrent.TimeoutException;
 public class MqSender
 {
     private final static String QUEUE_NAME="test_queue";
-    private final static String QUEUE_IP="10.0.129.140";
+    private final static String QUEUE_IP="172.24.161.234";
     private final static int QUEUE_PORT=5672;
     private final static String QUEUE_USER="ygph_dev";
     private final static String QUEUE_PWD="ygph_dev";

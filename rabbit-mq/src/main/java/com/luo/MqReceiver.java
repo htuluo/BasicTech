@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class MqReceiver {
     private final static String QUEUE_NAME = "test_queue";
-    private final static String QUEUE_IP = "10.0.129.140";
+    private final static String QUEUE_IP = "172.24.161.234";
     private final static int QUEUE_PORT = 5672;
     private final static String QUEUE_USER = "ygph_dev";
     private final static String QUEUE_PWD = "ygph_dev";
@@ -37,18 +37,24 @@ public class MqReceiver {
 //                String routingKey=envelope.getRoutingKey();
 //                String contentType=properties.getContentType();
                 long deliverTag=envelope.getDeliveryTag();
-                System.out.println(new String(body, "utf-8"));
-                channel.basicAck(deliverTag,true);
+                System.out.println("receive the deliverTag "+deliverTag+"  "+new String(body, "utf-8"));
+                channel.basicAck(deliverTag,false);
             }
         };
-//        consumer.handleDelivery();
+        Consumer consumer2 = new DefaultConsumer(channel) {
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+//                String routingKey=envelope.getRoutingKey();
+//                String contentType=properties.getContentType();
+                long deliverTag=envelope.getDeliveryTag();
+                System.out.println("receive the deliverTag2 "+deliverTag+"  "+new String(body, "utf-8"));
+                channel.basicAck(deliverTag,false);
+            }
+        };
         String s = channel.basicConsume(QUEUE_NAME, false, consumer);
-        long start = System.currentTimeMillis();
-//        for (int i = 0; i < 1000; i++) {
-//
-//            consumer.handleDelivery("222");
-//        }
-        System.out.println(s + (System.currentTimeMillis() - start));
+        String s2 = channel.basicConsume(QUEUE_NAME, false, consumer2);
+//        consumer.handleDelivery();
+//        long start = System.currentTimeMillis();
+//        System.out.println(s + (System.currentTimeMillis() - start));
 //        channel.close();
 //        connection.close();
     }
