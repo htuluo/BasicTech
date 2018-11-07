@@ -20,6 +20,9 @@ public class MqSender
     private final static String QUEUE_USER="ygph_dev";
     private final static String QUEUE_PWD="ygph_dev";
     private final static String QUEUE_V_HOST="/ygph_dev";
+    private final static String ROUTING_KEY="routing-key-llm";
+    private final static String EXCHANGE_LLM = "exchange_llm";
+
 
     public static void main( String[] args ) throws IOException, TimeoutException {
         ConnectionFactory connectionFactory=new ConnectionFactory();
@@ -29,14 +32,17 @@ public class MqSender
         connectionFactory.setPassword(QUEUE_PWD);
         connectionFactory.setVirtualHost(QUEUE_V_HOST);
 
+
         Connection connection=connectionFactory.newConnection();
         Channel channel=connection.createChannel();
         channel.queueDeclare(QUEUE_NAME,true,false,false,null);
+        channel.exchangeDeclare(EXCHANGE_LLM,"fanout");
+        channel.queueBind(QUEUE_NAME,EXCHANGE_LLM,ROUTING_KEY);
         String message="hello world";
         long start=System.currentTimeMillis();
         int j=0;
         for (int i=j;i<j+10000;i++ ){
-            channel.basicPublish("",QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN,(message+i).getBytes());
+            channel.basicPublish(EXCHANGE_LLM,ROUTING_KEY, MessageProperties.PERSISTENT_TEXT_PLAIN,(message+i).getBytes());
         }
         System.out.println( "Hello World!" +(System.currentTimeMillis()-start));
         channel.close();
