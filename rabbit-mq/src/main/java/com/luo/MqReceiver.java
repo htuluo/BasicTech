@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class MqReceiver {
     private final static String QUEUE_NAME = "test_queue";
+    private final static String QUEUE_NAME2= "test_queue_2";
     private final static String QUEUE_IP = "172.24.161.234";
     private final static int QUEUE_PORT = 5672;
     private final static String QUEUE_USER = "ygph_dev";
@@ -32,6 +33,7 @@ public class MqReceiver {
         final Channel channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        channel.queueDeclare(QUEUE_NAME2, true, false, false, null);
         Consumer consumer = new DefaultConsumer(channel) {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 //                String routingKey=envelope.getRoutingKey();
@@ -51,7 +53,7 @@ public class MqReceiver {
             }
         };
         String s = channel.basicConsume(QUEUE_NAME, false, consumer);
-        String s2 = channel.basicConsume(QUEUE_NAME, false, consumer2);
+        String s2 = channel.basicConsume(QUEUE_NAME2, false, consumer2);
 //        consumer.handleDelivery();
 //        long start = System.currentTimeMillis();
 //        System.out.println(s + (System.currentTimeMillis() - start));
