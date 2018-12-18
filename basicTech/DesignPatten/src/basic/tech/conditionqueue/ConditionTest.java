@@ -1,4 +1,4 @@
-package basic.tech.ConditionQueue;
+package basic.tech.conditionqueue;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
