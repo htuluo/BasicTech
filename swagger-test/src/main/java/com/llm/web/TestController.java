@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * @history: (版本) 作者 时间 注释
  */
 @RestController
-@RequestMapping(path = "app",method = RequestMethod.GET)
+@RequestMapping(path = "app",method = RequestMethod.POST)
 public class TestController {
 
     @ResponseStatus
