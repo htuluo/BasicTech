@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.*;
  * @history: (版本) 作者 时间 注释
  */
 @RestController
-@RequestMapping(path = "app",method = RequestMethod.POST)
+@RequestMapping(path = "app", method = RequestMethod.POST)
 public class TestController {
 
     @ResponseStatus
-    @RequestMapping(path = "getOne/{id}",method = RequestMethod.GET)
-    public String getOne(@PathVariable("id") Integer id){
-        return "welcome"+id;
+    @RequestMapping(path = "getOne/{id}", method = RequestMethod.GET)
+    public String getOne(@PathVariable("id") Integer id) {
+        return "welcome" + id;
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "getTwo",consumes = "application/json")
+    public String getTwo(@RequestBody String jsonParams,@RequestBody String key) {
+        return "hello " + jsonParams;
     }
 }
