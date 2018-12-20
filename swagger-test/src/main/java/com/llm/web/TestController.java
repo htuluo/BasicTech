@@ -20,8 +20,8 @@ public class TestController {
     }
 
     @ResponseBody
-    @RequestMapping(path = "getTwo",consumes = "application/json")
-    public String getTwo(@RequestBody String jsonParams,@RequestBody String key) {
+    @RequestMapping(path = "getTwo")
+    public String getTwo(@RequestBody String jsonParams) {
         return "hello " + jsonParams;
     }
 }
