@@ -42,10 +42,10 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("SwaggerTest demo")
-                .description("sss")
+                .title("SwaggerTest title")
+                .description("description")
                 .termsOfServiceUrl("http://www.baidu.com")
-                .contact("llm")
+                .contact("luolm")
                 .version("1.0")
                 .build();
     }

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(path = "app", method = RequestMethod.POST)
-@Api(value = "TestSwagger|测试swaggerAPI")
+@Api(value = "TestSwagger|测试swaggerAPI",description = "api description")
 public class TestController {
 
-    @ResponseStatus
+    @ResponseBody
     @RequestMapping(path = "getOne/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "getOne接口",notes = "注释getOne")
     public String getOne(@PathVariable("id") Integer id) {
@@ -28,7 +28,7 @@ public class TestController {
     @ResponseBody
     @RequestMapping(path = "getTwo")
     @ApiOperation(value="getTwo", notes="根据用户id修改密码")
-    @ApiImplicitParams({@ApiImplicitParam(paramType="query", name = "jsonParams", value = "Json字符", required = true, dataType = "String")})
+    @ApiImplicitParams({@ApiImplicitParam(paramType="body", name = "jsonParams", value = "Json字符", required = true, dataType = "String")})
     public String getTwo(@RequestBody String jsonParams) {
         return "hello " + jsonParams;
     }
