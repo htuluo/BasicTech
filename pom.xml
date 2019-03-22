@@ -25,6 +25,11 @@
         <spring-boot.version>1.4.3.RELEASE</spring-boot.version>
     </properties>
 
+    <modules>
+        <module>basic-tech</module>
+        <module>rabbit-mq</module>
+        <module>swagger-test</module>
+    </modules>
     <dependencies>
     </dependencies>
 
