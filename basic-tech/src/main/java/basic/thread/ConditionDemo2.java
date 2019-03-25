@@ -40,8 +40,8 @@ class StringBuffer2 {
 
                 notFull.await();
             }
-            arr[count] = x;
-            System.err.println(Thread.currentThread().getName() + "：put:" + x.toString());
+            arr[putper] = x;
+            System.err.println(Thread.currentThread().getName() + "：put:" + x.toString()+";count="+count);
             System.out.println("-------------");
 //            System.out.println(arr);
             if (++putper == arr.length) {
@@ -89,8 +89,8 @@ class Prod extends StringBuffer2 implements Runnable {
     public void run() {
         for (int i = 0; i < arr.length; i++) {
             try {
-                put(i);
                 Thread.sleep(100);
+                put(i);
             } catch (InterruptedException e) {
 
                 e.printStackTrace();
@@ -130,14 +130,15 @@ public class ConditionDemo2 {
         Cus cus = new Cus(s);
 
         Thread t1 = new Thread(pro);
-        Thread t2 = new Thread(pro);
-        Thread t3 = new Thread(cus);
+//        Thread t2 = new Thread(pro);
+//        Thread t3 = new Thread(cus);
         Thread t4 = new Thread(cus);
 
-        t1.start();
-        t3.start();
-        t2.start();
         t4.start();
+        Thread.sleep(100);
+        t1.start();
+//        t3.start();
+//        t2.start();
 
     }
 

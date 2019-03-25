@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * */
 
-class StringBuffer {
+class StringBuf {
 
 	// 创建锁对象
 	final Lock lock = new ReentrantLock();
@@ -20,7 +20,7 @@ class StringBuffer {
 	final Condition notEmpty = lock.newCondition();
 
 	// 创建资源 数组形式
-	final Object[] arr = new Object[30];
+	final Object[] arr = new Object[20];
 
 	// 定义数组指针
 	int putper;
@@ -36,7 +36,7 @@ class StringBuffer {
 			while(count == arr.length) {
 				notFull.await();
 			}
-			System.err.println(Thread.currentThread().getName()+":put:"+x.toString());
+			System.err.println(Thread.currentThread().getName()+":put:"+x.toString()+";count-"+count);
 			arr[putper] = x;
 			if (++putper == arr.length) {
 				putper = 0;
@@ -57,7 +57,7 @@ class StringBuffer {
 				notEmpty.await();
 			}
 			Object x = arr[takeper];
-			System.err.println(Thread.currentThread().getName()+":take:" + x);
+			System.err.println(Thread.currentThread().getName()+":take:" + x+";count-"+count);
 			if (++takeper == arr.length) {
 				takeper = 0;
 			}
@@ -73,8 +73,8 @@ class StringBuffer {
 }
 
 class Put implements Runnable {
-	private StringBuffer stringBuffer;
-	public Put(StringBuffer stringbuff) {
+	private StringBuf stringBuffer;
+	public Put(StringBuf stringbuff) {
 		this.stringBuffer = stringbuff;
 	}
 
@@ -94,9 +94,9 @@ class Put implements Runnable {
 }
 
 class Take implements Runnable {
-	private StringBuffer stringBuffer;
+	private StringBuf stringBuffer;
 
-	public Take(StringBuffer stringbuff) {
+	public Take(StringBuf stringbuff) {
 		this.stringBuffer = stringbuff;
 	}
 
@@ -119,14 +119,20 @@ class Take implements Runnable {
 public class ConditionDemo {
 
 	public static void main(String[] args) throws InterruptedException {
-		StringBuffer sb = new StringBuffer();
+		StringBuf sb = new StringBuf();
 
 		Put put = new Put(sb);
 		Thread t1 = new Thread(put);
+		Thread t3 = new Thread(put);
+
 		Take take = new Take(sb);
 		Thread t2 = new Thread(take);
+		Thread t4 = new Thread(take);
+
 		t1.start();
 		t2.start();
+		t3.start();
+		t4.start();
 
 
 	}
