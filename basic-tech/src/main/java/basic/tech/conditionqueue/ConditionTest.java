@@ -53,7 +53,7 @@ public class ConditionTest {
     }
 
     public static void main(String[] args) {
-        ConditionTest test = new ConditionTest();
+        final  ConditionTest test = new ConditionTest();
         new Thread(new Runnable() {
             @Override
             public void run() {

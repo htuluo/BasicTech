@@ -34,7 +34,7 @@ public class BlockQueueTest {
     }
 
     public static void main(String[] args) {
-        BlockQueueTest test=new BlockQueueTest();
+       final BlockQueueTest test=new BlockQueueTest();
 
         new Thread(new Runnable() {
             @Override
