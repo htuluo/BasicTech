@@ -36,8 +36,8 @@ class StringBuffer {
 			while(count == arr.length) {
 				notFull.await();
 			}
-			arr[count] = x;
-			System.err.println(Thread.currentThread().getName()+":put"+x.toString());
+			System.err.println(Thread.currentThread().getName()+":put:"+x.toString());
+			arr[putper] = x;
 			if (++putper == arr.length) {
 				putper = 0;
 			}
@@ -56,8 +56,8 @@ class StringBuffer {
 			while(count == 0) {
 				notEmpty.await();
 			}
-			Object x = arr[count];
-			System.err.println(Thread.currentThread().getName()+":take" + x);
+			Object x = arr[takeper];
+			System.err.println(Thread.currentThread().getName()+":take:" + x);
 			if (++takeper == arr.length) {
 				takeper = 0;
 			}
@@ -104,7 +104,7 @@ class Take implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1000);
 				stringBuffer.take();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
