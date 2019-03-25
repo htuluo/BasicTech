@@ -1,4 +1,4 @@
-package ThreadPackage;
+package basic.thread;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -20,7 +20,7 @@ class StringBuffer {
 	final Condition notEmpty = lock.newCondition();
 
 	// 创建资源 数组形式
-	final Object[] arr = new Object[100];
+	final Object[] arr = new Object[30];
 
 	// 定义数组指针
 	int putper;
@@ -33,10 +33,11 @@ class StringBuffer {
 	public void put(Object x) throws InterruptedException {
 		lock.lock();
 		try{
-			while(count == arr.length)
+			while(count == arr.length) {
 				notFull.await();
+			}
 			arr[count] = x;
-			System.err.println("put"+x.toString());
+			System.err.println(Thread.currentThread().getName()+":put"+x.toString());
 			if (++putper == arr.length) {
 				putper = 0;
 			}
@@ -52,10 +53,11 @@ class StringBuffer {
 	public Object take() throws InterruptedException {
 		lock.lock();
 		try {
-			while(count == 0)
+			while(count == 0) {
 				notEmpty.await();
-			Object x = arr[takeper];
-			System.err.println("take" + x);
+			}
+			Object x = arr[count];
+			System.err.println(Thread.currentThread().getName()+":take" + x);
 			if (++takeper == arr.length) {
 				takeper = 0;
 			}
@@ -95,7 +97,6 @@ class Take implements Runnable {
 	private StringBuffer stringBuffer;
 
 	public Take(StringBuffer stringbuff) {
-
 		this.stringBuffer = stringbuff;
 	}
 
@@ -103,7 +104,7 @@ class Take implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(10);
 				stringBuffer.take();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

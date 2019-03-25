@@ -1,4 +1,4 @@
-package ThreadPackage;
+package basic.thread;
 
 /**
  * Created by dell-3020 on 2017/9/27.

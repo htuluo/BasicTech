@@ -1,4 +1,4 @@
-package ThreadPackage;
+package basic.thread;
 
 public class VolitaleTest extends Thread {
 	public static Integer nInteger = 0;
