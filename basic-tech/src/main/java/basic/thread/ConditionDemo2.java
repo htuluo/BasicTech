@@ -30,7 +30,15 @@ class StringBuffer2 {
     // 定义计数器
     int count;
 
-//	public StringBuffer s;
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    //	public StringBuffer s;
 
     // 生产线程
     public void put(Object x) throws InterruptedException {
@@ -79,9 +87,17 @@ class StringBuffer2 {
 }
 
 class Prod extends StringBuffer2 implements Runnable {
-    private java.lang.StringBuffer s;
+    private StringBuffer2 s;
 
-    public Prod(java.lang.StringBuffer s) {
+    public StringBuffer2 getS() {
+        return s;
+    }
+
+    public void setS(StringBuffer2 s) {
+        this.s = s;
+    }
+
+    public Prod(StringBuffer2 s) {
         this.s = s;
     }
 
@@ -89,7 +105,6 @@ class Prod extends StringBuffer2 implements Runnable {
     public void run() {
         for (int i = 0; i < arr.length; i++) {
             try {
-                Thread.sleep(100);
                 put(i);
             } catch (InterruptedException e) {
 
@@ -101,18 +116,30 @@ class Prod extends StringBuffer2 implements Runnable {
 }
 
 class Cus extends StringBuffer2 implements Runnable {
-    private java.lang.StringBuffer s;
+    private StringBuffer2 s;
 
-    public Cus(StringBuffer s) {
+    public StringBuffer2 getS() {
+        return s;
+    }
+
+    public void setS(StringBuffer2 s) {
+        this.s = s;
+    }
+
+    public Cus(StringBuffer2 s) {
         this.s = s;
     }
 
     @Override
     public void run() {
         try {
-            if (count != 0) {
-                System.out.println(take());
+            while (true) {
+                take();
+                Thread.sleep(200);
             }
+//            if (count != 0) {
+//                System.out.println();
+//            }
 
         } catch (InterruptedException e) {
 
@@ -125,18 +152,23 @@ class Cus extends StringBuffer2 implements Runnable {
 public class ConditionDemo2 {
 
     public static void main(String[] args) throws InterruptedException {
-        java.lang.StringBuffer s = new java.lang.StringBuffer();
+//        java.lang.StringBuffer s = new java.lang.StringBuffer();
+        StringBuffer2 s = new StringBuffer2();
         Prod pro = new Prod(s);
         Cus cus = new Cus(s);
+
+        pro.setCount(20);
+        pro.getS().setCount(15);
+        System.out.println("cus.getCount()---"+cus.getS().getCount());
 
         Thread t1 = new Thread(pro);
 //        Thread t2 = new Thread(pro);
 //        Thread t3 = new Thread(cus);
         Thread t4 = new Thread(cus);
 
-        t4.start();
-        Thread.sleep(100);
         t1.start();
+        t4.start();
+//        Thread.sleep(100);
 //        t3.start();
 //        t2.start();
 

@@ -20,7 +20,7 @@ class StringBuf {
 	final Condition notEmpty = lock.newCondition();
 
 	// 创建资源 数组形式
-	final Object[] arr = new Object[20];
+	final Object[] arr = new Object[10];
 
 	// 定义数组指针
 	int putper;
@@ -80,7 +80,7 @@ class Put implements Runnable {
 
 	@Override
 	public void run() {
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 30; i++) {
 			try {
 				stringBuffer.put(i);
 				Thread.sleep(100);
@@ -123,16 +123,16 @@ public class ConditionDemo {
 
 		Put put = new Put(sb);
 		Thread t1 = new Thread(put);
-		Thread t3 = new Thread(put);
+//		Thread t3 = new Thread(put);
 
 		Take take = new Take(sb);
 		Thread t2 = new Thread(take);
-		Thread t4 = new Thread(take);
+//		Thread t4 = new Thread(take);
 
 		t1.start();
 		t2.start();
-		t3.start();
-		t4.start();
+//		t3.start();
+//		t4.start();
 
 
 	}
