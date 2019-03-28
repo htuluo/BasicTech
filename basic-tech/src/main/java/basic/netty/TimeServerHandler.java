@@ -23,7 +23,7 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
         byteBuf.readBytes(req);
         String body = new String(req, "utf-8");
         System.out.println("The time serrver receive order:"+body);
-        String currentTime="ERROR";
+        String currentTime="OK";
         if (body.equals("abc\r\n")){
             currentTime=String.valueOf(System.currentTimeMillis());
         }

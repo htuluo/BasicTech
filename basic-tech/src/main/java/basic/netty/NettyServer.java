@@ -16,15 +16,15 @@ import java.util.concurrent.Executors;
  * @history: (版本) 作者 时间 注释
  */
 public class NettyServer {
-    public static void main(String[] args) {
-        AbstractBootstrap.ChannelFactory factory=new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-        ServerBootstrap serverBootstrap = new ServerBootstrap(factory);
-        serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-            @Override
-            public ChannelPipeline getPipeline() throws Exception {
-
-                return Channels.pipeline(new timeserver);
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        AbstractBootstrap.ChannelFactory factory=new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
+//        ServerBootstrap serverBootstrap = new ServerBootstrap(factory);
+//        serverBootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+//            @Override
+//            public ChannelPipeline getPipeline() throws Exception {
+//
+//                return Channels.pipeline(new timeserver);
+//            }
+//        });
+//    }
 }
