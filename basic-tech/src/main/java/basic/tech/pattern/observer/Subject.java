@@ -1,8 +1,7 @@
-package basic.tech.observer;
+package basic.tech.pattern.observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 /**
  * @description:

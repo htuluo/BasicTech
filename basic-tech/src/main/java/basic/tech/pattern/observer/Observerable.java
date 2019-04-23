@@ -1,4 +1,4 @@
-package basic.tech.observer;
+package basic.tech.pattern.observer;
 
 /**
  * @description:
