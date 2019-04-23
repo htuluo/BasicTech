@@ -1,4 +1,4 @@
-package basic.tech.strategy;
+package basic.tech.pattern.adapter;
 
 /**
  * @description:
@@ -7,6 +7,8 @@ package basic.tech.strategy;
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
-public interface Weapon {
-    void shooting();
+public interface Target {
+    void typec();
+    void typecToVga();
+    void typecToHdmi();
 }

@@ -1,7 +1,7 @@
-package basic.tech.adapter;
+package basic.tech.pattern.adapter;
 
 /**
- * @description:
+ * @description: 适配器模式demo
  * @author: luolm
  * @createTime： 2019/4/17
  * @version: v1.0.0

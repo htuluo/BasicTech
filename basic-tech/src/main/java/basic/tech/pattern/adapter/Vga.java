@@ -1,4 +1,4 @@
-package basic.tech.adapter;
+package basic.tech.pattern.adapter;
 
 /**
  * @description:

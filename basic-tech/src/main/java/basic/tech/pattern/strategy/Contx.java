@@ -1,4 +1,4 @@
-package basic.tech.strategy;
+package basic.tech.pattern.strategy;
 
 /**
  * @description:
