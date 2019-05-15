@@ -8,5 +8,7 @@
 
     </bean>
     <bean class="com.llm.bean.InitHelloWorld"></bean>
+    <bean id="cStartEventHandler" class="com.llm.bean.CStartEventHandler"></bean>
+    <bean id="cStopEventHandler" class="com.llm.bean.CStopEventHandler"></bean>
 
 </beans>

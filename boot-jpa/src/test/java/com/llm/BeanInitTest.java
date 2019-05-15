@@ -1,6 +1,7 @@
 package com.llm;
 
 import com.llm.entity.HelloWorld;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,9 +15,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class BeanInitTest {
     public static void main(String[] args) {
 
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+        context.start();
         HelloWorld helloWorld = (HelloWorld)context.getBean("helloWorld");
         helloWorld.getMessage();
-        context.registerShutdownHook();
+        context.stop();
     }
 }
