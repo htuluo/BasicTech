@@ -1,6 +1,7 @@
 package basic.classloader;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -16,12 +17,20 @@ public class ClassReflection {
         Class<MyClass> myClass=MyClass.class;
         try {
             Constructor<MyClass> constructor = myClass.getConstructor(int.class, String.class);
-            MyClass abc = constructor.newInstance(2, "abc");
-            System.out.println(abc);
+            MyClass aInstance = constructor.newInstance(2, "abc");
+            System.out.println(aInstance);
             MyClass myClass1 = myClass.newInstance();
             Method myClassMethod = myClass.getMethod("setName", String.class);
             myClassMethod.invoke(myClass1,"dds");
             System.out.println(myClass1);
+
+            Field name = myClass.getField("pubField");
+            name.set(aInstance,"filedName");
+            System.out.println(aInstance);
+            Field declaredField = myClass.getDeclaredField("name");
+            declaredField.setAccessible(true);
+            declaredField.set(aInstance,"otherName");
+            System.out.println(aInstance);
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -30,6 +39,8 @@ public class ClassReflection {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } finally {
         }

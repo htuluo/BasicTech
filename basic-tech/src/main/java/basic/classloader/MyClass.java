@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class MyClass<T> implements Cloneable,Serializable {
     private int id=1;
     private String name="Unknown";
+    public String pubField="";
 
     public MyClass() {
     }
@@ -37,7 +38,7 @@ public class MyClass<T> implements Cloneable,Serializable {
 
     @Override
     public String toString() {
-        return "MyClass: id="+this.id+", name="+this.name;
+        return "MyClass: id="+this.id+", name="+this.name+", pubField="+this.pubField;
     }
 
 }
