@@ -13,8 +13,15 @@ public class MyClass<T> implements Cloneable,Serializable {
     private int id=1;
     private String name="Unknown";
 
+    public MyClass() {
+    }
+
     public MyClass(int id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
