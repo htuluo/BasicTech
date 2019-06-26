@@ -33,7 +33,7 @@ public class MemoryTest {
         });
         thread.start();
 
-        Thread thread2 = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -45,8 +45,7 @@ public class MemoryTest {
                     System.out.println("Thread " + Thread.currentThread().getName() + " is running");
                 }
             }
-        });
-        thread2.start();
+        }).start();
     }
 
 }
