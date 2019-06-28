@@ -10,5 +10,9 @@ public class StringBuilderTest {
         StringBuilder sb=new StringBuilder("dd");
         sb.append(9);
         System.out.println(sb.toString());
+        String a= "bbb";
+        String b=new String("bbb");
+        System.out.println(a==b);
+        System.out.println(a.equals(b));
     }
 }
