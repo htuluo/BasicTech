@@ -13,7 +13,7 @@ import java.lang.management.ThreadMXBean;
  * @history: (版本) 作者 时间 注释
  */
 public class IntegerDemo {
-    public static Integer count = 0;
+    public static volatile Integer count = 0;
     public static int num = 20;
 
     public static void main(String[] args) {
