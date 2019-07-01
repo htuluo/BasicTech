@@ -22,7 +22,7 @@ public class PermGenDemon {
         int count=0;
         while (true){
             Enhancer enhancer=new Enhancer();
-            enhancer.setSuperclass(InitClass.class);
+            enhancer.setSuperclass(PermClass.class);
             enhancer.setUseCache(false);
             enhancer.setCallback(new MethodInterceptor() {
                 @Override
@@ -36,25 +36,5 @@ public class PermGenDemon {
         }
 
     }
-
-
-    public class PermClass{
-        String aStr;
-        public PermClass() {
-        }
-
-        public String getaStr() {
-            return aStr;
-        }
-
-        public void setaStr(String aStr) {
-            this.aStr = aStr;
-        }
-
-        public PermClass(String aStr) {
-            this.aStr = aStr;
-        }
-    }
-
 }
 
