@@ -30,6 +30,11 @@
       <artifactId>netty-all</artifactId>
       <version>4.1.11.Final</version>
     </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>3.2.10</version>
+    </dependency>
   </dependencies>
 
   <build>
