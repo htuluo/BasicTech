@@ -31,6 +31,11 @@ public class PrintNum0 {
         }
     }
 
+    /**
+     * 自增一次
+     * @param array
+     * @return
+     */
     private static boolean incrementOne(String[] array) {
         boolean overFlow = false;
         int n = array.length;
@@ -75,6 +80,10 @@ public class PrintNum0 {
     }
 
 
+    /**
+     * 打印一次数
+     * @param array
+     */
     private static void printArrayToStr(String[] array) {
         boolean flag = false;
         StringBuilder stringBuilder = new StringBuilder();
