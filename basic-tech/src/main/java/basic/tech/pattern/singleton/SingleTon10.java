@@ -7,13 +7,13 @@ package basic.tech.pattern.singleton;
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
-public class SingleTon {
-    private static SingleTon singleTon;
-    private SingleTon(){}
+public class SingleTon10 {
+    private static SingleTon10 singleTon;
+    private SingleTon10(){}
 
-    public static SingleTon getSingleTon() {
+    public static synchronized SingleTon10 getSingleTon() {
         if (singleTon==null){
-            singleTon=new SingleTon();
+            singleTon=new SingleTon10();
         }
         return singleTon;
     }
