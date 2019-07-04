@@ -24,8 +24,8 @@ public class ProxyCompareTester {
         int preRunCount=10000;
         runWithoutMonitor(nativeTest,preRunCount);
         runWithoutMonitor(decoratorTest,preRunCount);
-        runWithoutMonitor(dynamicProxy,preRunCount);
         runWithoutMonitor(cglibProxy,preRunCount);
+        runWithoutMonitor(dynamicProxy,preRunCount);
 
         Map<String,TestInterface> tests=new LinkedHashMap<String,TestInterface>();
         tests.put("Native      ",nativeTest);
