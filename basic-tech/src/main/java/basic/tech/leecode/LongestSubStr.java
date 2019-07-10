@@ -3,13 +3,12 @@ package basic.tech.leecode;
 import io.netty.util.internal.StringUtil;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
- * @description: 字符串的最长子串
+ * 第三题
+ * @description: 字符串的最长子串,
  * @author: luolm
  * @createTime： 2019/7/9
  * @version: v1.0.0
