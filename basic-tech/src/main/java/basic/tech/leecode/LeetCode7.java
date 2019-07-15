@@ -7,7 +7,7 @@ package basic.tech.leecode;
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
-public class LeetCode6 {
+public class LeetCode7 {
     public static void main(String[] args) {
 //        Integer integer = new Integer("-111111");
 //        System.out.println(integer);
