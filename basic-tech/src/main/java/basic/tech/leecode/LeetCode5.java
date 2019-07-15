@@ -12,7 +12,7 @@ import org.apache.tools.ant.util.StringUtils;
  */
 public class LeetCode5 {
     public static void main(String[] args) {
-        System.out.println(longestString("abacdefghhgfedc"));
+        System.out.println(longestString("abcpkaka"));
     }
     public static String longestString(String str){
         if (StringUtil.isNullOrEmpty(str)){
@@ -55,12 +55,12 @@ public class LeetCode5 {
 
 
         }
-        if (status==1){
+        if (status>0){
             return str.substring(indx-maxLength/2,indx-maxLength/2+maxLength);
         }
-        if (status==2){
-            return str.substring(indx-maxLength/2,indx-maxLength/2+maxLength);
-        }
+//        if (status==2){
+//            return str.substring(indx-maxLength/2,indx-maxLength/2+maxLength);
+//        }
         return "";
     }
 }
