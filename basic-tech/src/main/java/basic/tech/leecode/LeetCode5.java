@@ -1,10 +1,9 @@
 package basic.tech.leecode;
 
 import io.netty.util.internal.StringUtil;
-import org.apache.tools.ant.util.StringUtils;
 
 /**
- * @description:  第5题最长汇文子串
+ * @description:  第5题最长回文子串
  * @author: luolm
  * @createTime： 2019/7/15
  * @version: v1.0.0
@@ -12,7 +11,7 @@ import org.apache.tools.ant.util.StringUtils;
  */
 public class LeetCode5 {
     public static void main(String[] args) {
-        System.out.println(longestString("abcpkaka"));
+        System.out.println(longestString("aabmccmb"));
     }
     public static String longestString(String str){
         if (StringUtil.isNullOrEmpty(str)){
