@@ -1,5 +1,8 @@
 package com.llm.security.controller;
 
+import com.llm.security.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/user",method = RequestMethod.GET)
 public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
 
     @GetMapping
     public String getUser(){
         return "hello Spring Security";
     }
+
+    @GetMapping("/login")
+    public String login(String username,String password){
+
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        return userDetails.getUsername();
+    }
+
+
 }
