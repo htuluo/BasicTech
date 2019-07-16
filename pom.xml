@@ -31,6 +31,7 @@
         <module>rabbit-mq</module>
         <module>swagger-test</module>
         <module>boot-jpa</module>
+        <module>boot-sercurity</module>
     </modules>
     <dependencies>
     </dependencies>
