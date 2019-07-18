@@ -1,14 +1,16 @@
 package com.llm.security.service.impl;
 
+import com.llm.security.Dao.RoleDao;
+import com.llm.security.Dao.UserDao;
 import com.llm.security.configuration.PasswordEncoderImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.management.relation.Role;
+import java.util.List;
 
 /**
  * @description:
@@ -23,12 +25,23 @@ public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoderImpl passwordEncoder;
 
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         log.info("用户名：{}", username);
-        String password=passwordEncoder.encode("123456");
+        com.llm.security.Model.User user = this.userDao.findByName(username);
 
-        User user = new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        if (user==null){
+            return  new com.llm.security.Model.User();
+        }
+        //查询用户的角色信息，并返回存入user中
+        List<Role> roles = roleDao.getRolesByUid(user.getId());
+        user.setRoles(roles);
         return user;
+//        User user = new User(username, password, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }
