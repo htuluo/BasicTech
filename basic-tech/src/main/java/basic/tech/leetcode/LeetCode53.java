@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class LeetCode53 {
     public static void main(String[] args) {
-        int[] array = {1,-2,3};
+        int[] array = {1,-2,3,3,-2};
         findSubArray(array);
     }
 
