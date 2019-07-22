@@ -1,4 +1,4 @@
-package basic.tech.leecode;
+package basic.tech.leetcode;
 
 import io.netty.util.internal.StringUtil;
 

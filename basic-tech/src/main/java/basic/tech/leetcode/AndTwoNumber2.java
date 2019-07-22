@@ -1,4 +1,4 @@
-package basic.tech.leecode;
+package basic.tech.leetcode;
 
 import java.util.LinkedList;
 import java.util.List;

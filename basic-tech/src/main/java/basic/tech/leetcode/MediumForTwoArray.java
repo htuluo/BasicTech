@@ -1,4 +1,4 @@
-package basic.tech.leecode;
+package basic.tech.leetcode;
 
 /**
  * 第四题

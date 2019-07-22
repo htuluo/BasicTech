@@ -1,4 +1,4 @@
-package basic.tech.leecode;
+package basic.tech.leetcode;
 
 /**
  * @description:
