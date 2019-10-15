@@ -66,6 +66,7 @@ public class SingleThreadPoolTest {
             System.out.println(e);
         } finally {
             countDownLatch.countDown();
+            System.out.println("countDownLatch==" + countDownLatch.toString());
         }
     }
 }
