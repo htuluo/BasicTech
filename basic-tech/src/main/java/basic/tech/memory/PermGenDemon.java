@@ -1,6 +1,5 @@
 package basic.tech.memory;
 
-import basic.tech.InitClass;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
