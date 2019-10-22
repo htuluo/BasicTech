@@ -4,13 +4,6 @@ public class ChildClass extends ParentClass {
     private Integer childInteger;
     private Integer sameInteger = 12;
 
-    public Integer getSameInteger() {
-        return sameInteger;
-    }
-
-    public void setSameInteger(Integer sameInteger) {
-        this.sameInteger = sameInteger;
-    }
 
     {
         System.out.println("Children init:" + this.sameInteger+" this.hashcode="+this.hashCode());
@@ -18,6 +11,16 @@ public class ChildClass extends ParentClass {
 
     static {
         System.out.println("Children static init");
+    }
+
+    @Override
+    public Integer getSameInteger() {
+        return sameInteger;
+    }
+
+    @Override
+    public void setSameInteger(Integer sameInteger) {
+        this.sameInteger = sameInteger;
     }
 
     public Integer getChildInteger() {
@@ -28,6 +31,7 @@ public class ChildClass extends ParentClass {
         this.childInteger = childInteger;
     }
 
+    @Override
     public void printInfo() {
 
         System.out.println("child printInfo:" + sameInteger+" this.hashcode="+this.hashCode());
