@@ -6,12 +6,18 @@ public class ChildClass extends ParentClass {
 
 
     {
-        System.out.println("Children init:" + this.sameInteger+" this.hashcode="+this.hashCode());
+        System.out.println("Children init:" + this.sameInteger + " this.hashcode=" + this.hashCode());
     }
 
     static {
         System.out.println("Children static init");
     }
+
+    public ChildClass() {
+        System.out.println("Children Constructor init");
+    }
+
+    private static String childStr = "child";
 
     @Override
     public Integer getSameInteger() {
@@ -34,14 +40,14 @@ public class ChildClass extends ParentClass {
     @Override
     public void printInfo() {
 
-        System.out.println("child printInfo:" + sameInteger+" this.hashcode="+this.hashCode());
+        System.out.println("child printInfo:" + sameInteger + " this.hashcode=" + this.hashCode());
     }
 
     public static void main(String[] args) {
 
         ChildClass childClass = new ChildClass();
-        System.out.println(childClass.getParentInteger());
-        System.out.println(childClass.getSameInteger());
+//        System.out.println(childClass.getParentInteger());
+//        System.out.println(childClass.getSameInteger());
         // System.out.println(sChildClass.getParentInteger());
     }
 
