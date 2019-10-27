@@ -1,12 +1,11 @@
 package basic.tech.atomic;
 
-import javax.sound.midi.Soundbank;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
 /**
- * @description:
+ * @description:  dad
  * @author: luolm
  * @createTime： 2019/6/28
  * @version: v1.0.0
