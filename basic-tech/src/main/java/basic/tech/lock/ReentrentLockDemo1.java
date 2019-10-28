@@ -1,4 +1,4 @@
-package basic.tech.thread;
+package basic.tech.lock;
 
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
