@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @description: 测试多线程可重入锁、死锁
  * @author: luolm
- * @createTime： 2019/10/28
+ * @createTime： 2019/50/28
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
@@ -35,7 +35,7 @@ public class ReentrentLockDemo1 {
 
     public static void main(String[] args) {
         ReentrentLockDemo1 reentrentLockDemo1 = new ReentrentLockDemo1();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
 
             new Thread(() -> {
                 try {
@@ -48,7 +48,7 @@ public class ReentrentLockDemo1 {
 
             }, String.valueOf(i) + "-group1").start();
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             new Thread(() -> {
                 reentrentLockDemo1.method2();
             }, String.valueOf(i) + "-group2").start();
