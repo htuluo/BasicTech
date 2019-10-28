@@ -1,4 +1,4 @@
-package basic.tech.collection;
+package basic.tech.concurrent;
 
 import java.util.Random;
 import java.util.concurrent.SynchronousQueue;
