@@ -1,9 +1,9 @@
-package basic.tech.thread;
+package basic.tech.lock;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @description:
+ * @description: 自旋锁的实现
  * @author: luolm
  * @createTime： 2019/10/28
  * @version: v1.0.0
