@@ -11,6 +11,6 @@ public class Dclass {
     public static void main(String[] args) {
         System.out.println(Pclass.b);
         Pclass pclass = new Pclass();
-        System.out.println(pclass.b);
+        System.out.println(Pclass.a);
     }
 }
