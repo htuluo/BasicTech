@@ -18,11 +18,18 @@ public class ReferenceTransferDemo {
         this.anInt = 9;
     }
 
+    public void change(String str){
+        str="bb";
+    }
+
     public static void main(String[] args) {
         ReferenceTransferDemo referenceTransferDemo = new ReferenceTransferDemo();
         System.out.println(referenceTransferDemo.str + " " + String.valueOf(referenceTransferDemo.chars) + " " + referenceTransferDemo.anInt);
         referenceTransferDemo.change(referenceTransferDemo.str, referenceTransferDemo.chars, referenceTransferDemo.anInt);
         System.out.println(referenceTransferDemo.str + " " + String.valueOf(referenceTransferDemo.chars + " " + referenceTransferDemo.anInt));
+        String stra="bbbs";
+        referenceTransferDemo.change(stra);
+        System.out.println(stra);
 
     }
 }
