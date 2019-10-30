@@ -1,5 +1,7 @@
 package basic.tech.classinit;
 
+import java.text.MessageFormat;
+
 /**
  * @description:
  * @author: luolm
@@ -23,6 +25,11 @@ public class ReferenceTransferDemo {
     }
 
     public static void main(String[] args) {
+        //虚拟机能使用的最大内存
+        long l = Runtime.getRuntime().maxMemory();
+        //虚拟机中的内存
+        long l1 = Runtime.getRuntime().totalMemory();
+        System.out.println(MessageFormat.format("max:{0},total:{1}",l/1024/1024,l1/1024/1024));
         ReferenceTransferDemo referenceTransferDemo = new ReferenceTransferDemo();
         System.out.println(referenceTransferDemo.str + " " + String.valueOf(referenceTransferDemo.chars) + " " + referenceTransferDemo.anInt);
         referenceTransferDemo.change(referenceTransferDemo.str, referenceTransferDemo.chars, referenceTransferDemo.anInt);
