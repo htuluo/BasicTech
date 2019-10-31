@@ -1,8 +1,12 @@
 package basic.tech.memory;
 
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 import sun.misc.VM;
 
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +19,45 @@ import java.util.List;
  * @history: (版本) 作者 时间 注释
  */
 public class JavaVMOOM {
+    /**
+     * 静态内部类，用于Metaspace的oom
+     */
+    static class StaticClass{}
+
     public static void main(String[] args) {
 
-        directBufferErrorTest();
+        metaSpaceTest(args);
         return;
+    }
+
+    /**
+     * java.lang.OutOfMemoryError: Metaspace 演示
+     *-Xms10M -Xmx10M -Xss128k -XX:+PrintGCDetails -XX:+UseGCOverheadLimit -XX:MaxMetaspaceSize=5M
+     * @param args
+     * 其中vm 参数：MaxMetaspaceSize
+     */
+    private static void metaSpaceTest(String[] args) {
+        try {
+            while (true) {
+                Enhancer enhancer=new Enhancer();
+                enhancer.setSuperclass(StaticClass.class);
+                enhancer.setUseCache(true);
+                //lamda表达式
+                // enhancer.setCallback((MethodInterceptor) (o, method, objects, methodProxy) -> method.invoke(o,args));
+                enhancer.setCallback(new MethodInterceptor() {
+                    @Override
+                    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+                        return method.invoke(o,args);
+                    }
+                });
+                enhancer.create();
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
     }
 
     /**
