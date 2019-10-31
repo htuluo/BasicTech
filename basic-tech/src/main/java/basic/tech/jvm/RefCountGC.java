@@ -1,6 +1,7 @@
 package basic.tech.jvm;
 
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
 /**
@@ -15,8 +16,30 @@ public class RefCountGC {
     private Object instance = null;
 
     public static void main(String[] args) {
-        softReferencTest();
 
+        weakReferenceTest();
+    }
+
+    /**
+     * softReference的使用，只要有GC，够不够的时候都清除（引用需要被置为null）
+     * -Xms10m -Xmx10m -XX:+PrintGCDetails
+     */
+    private static void weakReferenceTest() {
+        WeakReference<Object> softReference = null;
+        try {
+            Object ob1 = new Object();
+
+            softReference = new WeakReference<Object>(ob1);
+            System.out.println("=====ob1\t" + softReference.get());
+            ob1 = null;
+            byte[] key = new byte[3 * 1024 * 1024];
+            System.gc();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("=====newKey\t" + softReference.get());
+
+        }
     }
 
     /**
