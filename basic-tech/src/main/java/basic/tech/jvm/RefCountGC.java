@@ -18,7 +18,36 @@ public class RefCountGC {
     private Object instance = null;
 
     public static void main(String[] args) {
-        referenceQueueTest();
+        phantomReferenceTest();
+    }
+
+    /**
+     * phantomReferenceTest，虚引用，get不到值，但回收之后进入referenceQueue队列
+     */
+    private static void phantomReferenceTest() {
+        PhantomReference<Object> weakReference = null;
+        try {
+            Object ob1 = new Object();
+
+            ReferenceQueue<Object> q = new ReferenceQueue<>();
+            weakReference = new PhantomReference<Object>(ob1, q);
+            System.out.println(ob1);
+            System.out.println(weakReference.get());
+            System.out.println(q.poll());
+            ob1 = null;
+            System.gc();
+            Thread.sleep(500);
+            System.out.println("==================");
+            System.out.println(ob1);
+            System.out.println(weakReference.get());
+            System.out.println(q.poll());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+//            System.out.println("=====newKey\t" + weakReference.get());
+
+        }
     }
 
     /**
