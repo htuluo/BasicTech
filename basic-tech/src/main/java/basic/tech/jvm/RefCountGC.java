@@ -1,11 +1,13 @@
 package basic.tech.jvm;
 
+import java.lang.ref.PhantomReference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
 /**
- * @description: 循环引用的GC演示
+ * @description: 循环引用的GC演示，强软弱虚引用的demo
  * @author: luolm
  * @createTime： 2019/10/30
  * @version: v1.0.0
@@ -16,8 +18,35 @@ public class RefCountGC {
     private Object instance = null;
 
     public static void main(String[] args) {
+        referenceQueueTest();
+    }
 
-        weakReferenceTest();
+    /**
+     * referenceQueueTest，对象回收放进referenceQueue
+     */
+    private static void referenceQueueTest() {
+        WeakReference<Object> weakReference = null;
+        try {
+            Object ob1 = new Object();
+
+            ReferenceQueue<Object> q = new ReferenceQueue<>();
+            weakReference = new WeakReference<Object>(ob1, q);
+            System.out.println(ob1);
+            System.out.println(weakReference.get());
+            System.out.println(q.poll());
+            ob1 = null;
+            System.gc();
+            System.out.println("==================");
+            System.out.println(ob1);
+            System.out.println(weakReference.get());
+            System.out.println(q.poll());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+//            System.out.println("=====newKey\t" + weakReference.get());
+
+        }
     }
 
     /**
