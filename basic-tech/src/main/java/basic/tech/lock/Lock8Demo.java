@@ -43,7 +43,7 @@ public class Lock8Demo {
 
 class Phone {
 
-    public synchronized void sendEmail() throws InterruptedException {
+    public static synchronized void sendEmail() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
         System.out.println("========sendEmail");
 
