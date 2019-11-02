@@ -21,7 +21,7 @@ public class TimeServerSimpleHandler extends SimpleChannelInboundHandler<String>
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
         System.out.println(channelHandlerContext.channel().remoteAddress()+" Say:"+s);
-        channelHandlerContext.writeAndFlush("receive:"+s+"\r\n");
+        channelHandlerContext.writeAndFlush("Sever has received:"+s+"\r\n");
     }
 
 
