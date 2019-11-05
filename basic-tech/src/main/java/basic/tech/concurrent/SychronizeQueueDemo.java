@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.concurrent.SynchronousQueue;
 
 /**
- * @description: SynchronousQueue的使用，
+ * @description: SynchronousQueue的使用，put和 take必须交替完成
  * @author: luolm
  * @createTime： 2019/10/28
  * @version: v1.0.0
@@ -15,10 +15,10 @@ public class SychronizeQueueDemo {
         SynchronousQueue<String> queue = new SynchronousQueue<>();
         new Thread(() -> {
             try {
-                queue.put("a");
-
-                queue.put("b");
-                queue.put("c");
+                for (int i = 0; i < 30; i++) {
+                    System.out.println(Thread.currentThread().getName() + "\tput\t" + i);
+                    queue.put(String.valueOf(i));
+                }
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -26,21 +26,16 @@ public class SychronizeQueueDemo {
         }, "AA").start();
         new Thread(() -> {
             try {
-                System.out.println(queue.take());
+                for (int i = 0; i < 30; i++) {
+                    System.out.println(Thread.currentThread().getName() + "\ttake\t" + queue.take());
 
-                int bound = 5000;
-                try {
-                    Thread.sleep(new Random().nextInt(bound));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    int bound = 1000;
+                    try {
+                        Thread.sleep(new Random().nextInt(bound));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                System.out.println(queue.take());
-                try {
-                    Thread.sleep(new Random().nextInt(bound));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(queue.take());
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
