@@ -1,5 +1,6 @@
 package basic.netty;
 
+import com.google.common.base.Charsets;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -9,6 +10,7 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.CharsetUtil;
 
 /**
  * @description:
@@ -32,6 +34,9 @@ public class TimeServer {
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
 
     }
@@ -42,7 +47,8 @@ public class TimeServer {
         public void initChannel(SocketChannel socketChannel) throws Exception {
             ChannelPipeline pipeline = socketChannel.pipeline();
             pipeline.addLast("framer",new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-            pipeline.addLast("decoder",new StringDecoder());
+//            pipeline.addLast("decoder",new StringDecoder());
+            pipeline.addLast("decoder",new StringDecoder(CharsetUtil.UTF_8));
             pipeline.addLast("encoder",new StringEncoder());
 
 //            pipeline.addLast("handler",new TimeServerHandler());
