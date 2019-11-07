@@ -1,8 +1,6 @@
 package basic.tech.concurrent;
 
-import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
@@ -16,7 +14,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class SychronizeQueueDemo {
     public static void main(String[] args) {
-        priorityBlockQueueDemo();
+        System.out.println(Math.round(-1.5f));
     }
 
     /**
