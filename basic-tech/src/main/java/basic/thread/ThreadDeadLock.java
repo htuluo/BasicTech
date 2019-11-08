@@ -1,4 +1,4 @@
-package basic.tech;
+package basic.thread;
 
 public class ThreadDeadLock {
 	public static class SynAddRunable implements Runnable {
