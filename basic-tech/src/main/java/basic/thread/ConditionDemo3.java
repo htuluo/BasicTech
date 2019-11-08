@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @description:
+ * @description: 多线程交替打印
  * @author: luolm
  * @createTime： 2019/11/8
  * @version: v1.0.0
