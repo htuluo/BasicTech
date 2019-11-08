@@ -18,9 +18,11 @@ public class DynamicProxyTest implements InvocationHandler {
         this.target = target;
     }
 
-    public static TestInterface newProxyInstance(TestInterface target){
-        return (TestInterface) Proxy.newProxyInstance(DynamicProxyTest.class.getClassLoader(),new Class<?>[]{TestInterface.class},new DynamicProxyTest(target));
+
+    public static TestInterface newProxyInstance(TestInterface target) {
+        return (TestInterface) Proxy.newProxyInstance(DynamicProxyTest.class.getClassLoader(), new Class<?>[]{TestInterface.class}, new DynamicProxyTest(target));
     }
+
     /**
      * Processes a method invocation on a proxy instance and returns
      * the result.  This method will be invoked on an invocation handler
@@ -69,6 +71,6 @@ public class DynamicProxyTest implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        return method.invoke(target,args);
+        return method.invoke(target, args);
     }
 }
