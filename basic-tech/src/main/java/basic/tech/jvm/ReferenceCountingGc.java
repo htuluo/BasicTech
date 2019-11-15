@@ -1,4 +1,4 @@
-package basic.tech;
+package basic.tech.jvm;
 
 public class ReferenceCountingGc {
 	private Object instace = null;

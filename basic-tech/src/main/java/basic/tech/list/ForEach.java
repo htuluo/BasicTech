@@ -1,4 +1,4 @@
-package basic.tech;
+package basic.tech.list;
 
 import java.util.ArrayList;
 import java.util.List;

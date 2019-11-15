@@ -1,4 +1,4 @@
-package basic.tech;
+package basic.tech.concurrent;
 
 import java.util.LinkedList;
 import java.util.List;
