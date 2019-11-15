@@ -1,5 +1,7 @@
 package basic.tech.thread;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @description: 演示线程报错的demo
  * @author: luolm
@@ -10,7 +12,7 @@ package basic.tech.thread;
 public class ThreadExceptionDemo {
 
     public static void main(String[] args) {
-        Thread thread = new Thread(new MyRunable());
+        Thread thread = new Thread(new MyRunable(), "AA");
         thread.setUncaughtExceptionHandler(new MyUncaultExceptionHandler());
         try {
             //加不加try效果一样
@@ -19,6 +21,13 @@ public class ThreadExceptionDemo {
             e.printStackTrace();
             System.out.println("Catch ========");
         }
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
+        System.out.println(thread.getName() + " isAlive:" + thread.isAlive());
         System.out.println("===========");
     }
 
@@ -35,6 +44,12 @@ class MyUncaultExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        System.out.println("uncaughtException catch"+e.getLocalizedMessage());
+        System.out.println("uncaughtException catch " + e.getLocalizedMessage());
+//        try {
+//            TimeUnit.SECONDS.sleep(20);
+//        } catch (InterruptedException e1) {
+//            e1.printStackTrace();
+//        }
+        System.out.println(t.getName() + " isAlive:" + t.isAlive());
     }
 }
