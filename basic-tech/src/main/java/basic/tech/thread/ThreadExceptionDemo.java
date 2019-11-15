@@ -35,6 +35,6 @@ class MyUncaultExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        System.out.println("uncaughtException catch");
+        System.out.println("uncaughtException catch"+e.getLocalizedMessage());
     }
 }
