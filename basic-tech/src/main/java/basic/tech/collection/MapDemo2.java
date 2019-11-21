@@ -1,6 +1,7 @@
 package basic.tech.collection;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Random;
  */
 public class MapDemo2 {
     public static void main(String[] args) {
-        HashMap h2 = new HashMap();
+        Map h2 = new HashMap();
         for (int i = 0; i < 10; i++) {
             h2.put(new Element(i), new Figureout());
         }
