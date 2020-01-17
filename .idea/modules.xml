@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/BasicTech_20200117.iml" filepath="$PROJECT_DIR$/.idea/BasicTech_20200117.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basic-tech/basic-tech.iml" filepath="$PROJECT_DIR$/basic-tech/basic-tech.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boot-jpa/boot-jpa.iml" filepath="$PROJECT_DIR$/boot-jpa/boot-jpa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boot-sercurity/boot-sercurity.iml" filepath="$PROJECT_DIR$/boot-sercurity/boot-sercurity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rabbit-mq/rabbit-mq.iml" filepath="$PROJECT_DIR$/rabbit-mq/rabbit-mq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/swagger-test/swagger-test.iml" filepath="$PROJECT_DIR$/swagger-test/swagger-test.iml" />
+    </modules>
+  </component>
+</project>

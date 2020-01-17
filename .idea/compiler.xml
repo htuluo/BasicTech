@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="swagger-test" />
+        <module name="rabbit-mq" />
+        <module name="boot-sercurity" />
+        <module name="boot-jpa" />
+        <module name="basic-tech" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="basic-tech" target="1.8" />
+      <module name="BasicTech_20200117" target="1.7" />
+      <module name="boot-jpa" target="1.8" />
+      <module name="boot-sercurity" target="1.7" />
+      <module name="rabbit-mq" target="1.7" />
+      <module name="swagger-test" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
