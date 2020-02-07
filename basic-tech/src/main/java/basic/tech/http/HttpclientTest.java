@@ -31,11 +31,13 @@ public class HttpclientTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        postWithEntityUtils();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
+                    String url = "http://www.baidu.com";
+                    System.out.println("====="+url);
+                    String stringFromUrl = HttpclientUtils.getStringFromUrl(url, null);
+                    System.out.println(stringFromUrl.substring(0,20));
+
+
                 }
             }).start();
 
