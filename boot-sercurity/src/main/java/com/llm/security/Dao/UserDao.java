@@ -12,5 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserDao {
+
     User findByName(String username);
 }

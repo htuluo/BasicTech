@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @description:
  * @author: luolm
@@ -32,6 +34,18 @@ public class UserController {
         UserDetails userDetails = userService.loadUserByUsername(username);
         return userDetails.getUsername();
     }
+
+    @GetMapping("/test")
+    public String test(String username){
+        System.out.println("a request coming in "+username);
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "you will get "+username;
+    }
+
 
 
 }

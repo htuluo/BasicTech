@@ -1,5 +1,6 @@
 package com.llm.security;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
+@MapperScan(basePackages = "com.llm.dao")
 @SpringBootApplication
 public class SecurityApplication {
     public static void main(String[] args) {
