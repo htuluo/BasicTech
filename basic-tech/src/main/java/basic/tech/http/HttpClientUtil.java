@@ -73,6 +73,9 @@ public class HttpClientUtil {
     private static PoolingHttpClientConnectionManager manager = null;
 
     private static CloseableHttpClient client = null;
+    private static RequestConfig requestConfigDefault;
+    private static ThreadLocal<RequestConfig> threadRequestConfig;
+
 
     static {
         ConnectionSocketFactory csf = PlainConnectionSocketFactory.getSocketFactory();
@@ -85,9 +88,11 @@ public class HttpClientUtil {
         manager.setValidateAfterInactivity(VALIDATE_TIME);
         SocketConfig config = SocketConfig.custom().setSoTimeout(SOCKET_TIMEOUT).build();
         manager.setDefaultSocketConfig(config);
-        RequestConfig requestConf = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT)
-                .setConnectionRequestTimeout(REQUESTCONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
-        client = HttpClients.custom().setConnectionManager(manager).setDefaultRequestConfig(requestConf).setRetryHandler(
+        requestConfigDefault = RequestConfig.custom()
+                .setConnectTimeout(CONNECT_TIMEOUT)
+                .setConnectionRequestTimeout(REQUESTCONNECT_TIMEOUT)
+                .setSocketTimeout(SOCKET_TIMEOUT).build();
+        client = HttpClients.custom().setConnectionManager(manager).setDefaultRequestConfig(requestConfigDefault).setRetryHandler(
                 //实现了HttpRequestRetryHandler接口的
                 //public boolean retryRequest(IOException exception, int executionCount, HttpContext context)方法
                 (exception, executionCount, context) -> {
@@ -112,8 +117,9 @@ public class HttpClientUtil {
                         return true;
                     return false;
                 }).build();
-        if (manager != null && manager.getTotalStats() != null)
+        if (manager != null && manager.getTotalStats() != null) {
             log.info("客户池状态：" + manager.getTotalStats().toString());
+        }
     }
 
     private static SSLConnectionSocketFactory createSSLConnSocketFactory() {
@@ -190,11 +196,23 @@ public class HttpClientUtil {
         return content;
     }
 
-    private String res(HttpRequestBase method) {
+    private static String getResponseStr(HttpRequestBase method) {
+
+        return getResponseStrWithRequestConfig(method, null);
+    }
+
+    private static String getResponseStrWithRequestConfig(HttpRequestBase method, RequestConfig config) {
         HttpClientContext context = HttpClientContext.create();
         CloseableHttpResponse response = null;
         String content = RESPONSE_CONTENT;
         try {
+            if(config!=null) {
+                RequestConfig requestConfig = RequestConfig.copy(requestConfigDefault)
+                        .setConnectTimeout(12)
+                        .setConnectionRequestTimeout(20000)
+                        .setSocketTimeout(config.getSocketTimeout()).build();
+                context.setRequestConfig(requestConfig);
+            }
             response = client.execute(method, context);//执行GET/POST请求
             HttpEntity entity = response.getEntity();//获取响应实体
             if (entity != null) {
@@ -233,32 +251,32 @@ public class HttpClientUtil {
         return content;
     }
 
-    public String get(String url) {
+    public static String get(String url) {
         HttpGet get = new HttpGet(url);
-        return res(get);
+        return getResponseStr(get);
     }
 
-    public String get(String url, String cookie) {
+    public static String get(String url, String cookie) {
         HttpGet get = new HttpGet(url);
         if (StringUtils.isNotBlank(cookie))
             get.addHeader("cookie", cookie);
-        return res(get);
+        return getResponseStr(get);
     }
 
-    public byte[] getAsByte(String url) {
+    public static byte[] getAsByte(String url) {
         return get(url).getBytes();
     }
 
-    public String getHeaders(String url, String cookie, String headerName) {
+    public static String getHeaders(String url, String cookie, String headerName) {
         HttpGet get = new HttpGet(url);
         if (StringUtils.isNotBlank(cookie))
             get.addHeader("cookie", cookie);
-        res(get);
+        getResponseStr(get);
         Header[] headers = get.getHeaders(headerName);
         return headers == null ? null : headers.toString();
     }
 
-    public String getWithRealHeader(String url) {
+    public static String getWithRealHeader(String url) {
         HttpGet get = new HttpGet(url);
         get.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         get.addHeader("Accept-Language", "zh-cn");
@@ -266,10 +284,10 @@ public class HttpClientUtil {
         get.addHeader("Keep-Alive", "300");
         get.addHeader("Connection", "Keep-Alive");
         get.addHeader("Cache-Control", "no-cache");
-        return res(get);
+        return getResponseStr(get);
     }
 
-    public String post(String url, Map<String, String> param, String cookie) {
+    public static String post(String url, Map<String, String> param, String cookie) {
         HttpPost post = new HttpPost(url);
         param.keySet().stream().forEach(key -> {
             String value = param.get(key);
@@ -278,7 +296,7 @@ public class HttpClientUtil {
         });
         if (StringUtils.isNotBlank(cookie))
             post.addHeader("cookie", cookie);
-        return res(post);
+        return getResponseStr(post);
     }
 
     public String post(String url, String data) {
@@ -287,7 +305,7 @@ public class HttpClientUtil {
             post.addHeader("Content-Type", "application/json");
         }
         post.setEntity(new StringEntity(data, ContentType.APPLICATION_JSON));
-        return res(post);
+        return getResponseStr(post);
     }
 
     public String post(String url, Map<String, String> param, String cookie, Map<String, String> headers) {
@@ -313,6 +331,6 @@ public class HttpClientUtil {
         if (StringUtils.isNotEmpty(cookie))
             post.addHeader("cookie", cookie);
 
-        return res(post);
+        return getResponseStr(post);
     }
 }
