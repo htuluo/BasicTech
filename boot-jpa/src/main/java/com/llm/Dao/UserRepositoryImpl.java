@@ -58,7 +58,7 @@ public class UserRepositoryImpl implements UserCustomRepository {
         return page;
     }
     private Page<User> readPage(Query dataQuery,Query countQuery,Pageable pageable){
-        dataQuery.setFirstResult(pageable.getOffset());
+        dataQuery.setFirstResult((int)pageable.getOffset());
         dataQuery.setMaxResults(pageable.getPageSize());
         long total=(Long) countQuery.getSingleResult();
         List<User> content=total>(long) pageable.getOffset()?dataQuery.getResultList(): Collections.emptyList();
