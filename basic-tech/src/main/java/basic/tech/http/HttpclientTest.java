@@ -27,18 +27,30 @@ import java.util.concurrent.TimeUnit;
 public class HttpclientTest {
     public static void main(String[] args) {
 
-        for (int i = 0; i < 5; i++) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
+//        for (int i = 0; i < 5; i++) {
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    String url = "http://127.0.0.1:8080/test/get?str=0";
+//                    System.out.println("=====" + url);
+//                    String stringFromUrl = HttpClientUtil.get(url, null);
+//                    System.out.println(stringFromUrl);
+//
+//
+//                }
+//            }).start();
+//
+//        }
 
-                    String url = "http://127.0.0.1:8080/test/get?str=0";
-                    System.out.println("=====" + url);
-                    String stringFromUrl = HttpClientUtil.get(url, null);
-                    System.out.println(stringFromUrl);
+        for (int i = 0; i < 2; i++) {
+            new Thread(() -> {
+                String url = "https://docs.google.com/forms/u/0/";
+                System.out.println("=======+++==" + url);
+                String stringFromUrl = HttpClientUtil.get(url, null);
+                System.out.println(stringFromUrl);
 
 
-                }
             }).start();
 
         }

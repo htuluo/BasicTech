@@ -208,7 +208,7 @@ public class HttpClientUtil {
         try {
             if(config!=null) {
                 RequestConfig requestConfig = RequestConfig.copy(requestConfigDefault)
-                        .setConnectTimeout(12)
+                        .setConnectTimeout(1000)
                         .setConnectionRequestTimeout(20000)
                         .setSocketTimeout(config.getSocketTimeout()).build();
                 context.setRequestConfig(requestConfig);
