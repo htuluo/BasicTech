@@ -2,29 +2,25 @@ package basic.tech.http;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.net.ssl.*;
 
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
-import org.apache.http.NoHttpResponseException;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -44,6 +40,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,106 +157,36 @@ public class HttpClientUtil {
         return sslsf;
     }
 
-    private static String getContent(HttpRequestBase method) {
-        HttpClientContext context = HttpClientContext.create();
-        CloseableHttpResponse response = null;
-        String content = RESPONSE_CONTENT;
-        try {
-            response = client.execute(method, context);//执行GET/POST请求
-            HttpEntity entity = response.getEntity();//获取响应实体
-            if (entity != null) {
-                Charset charset = ContentType.getOrDefault(entity).getCharset();
-                content = EntityUtils.toString(entity, charset);
-                EntityUtils.consume(entity);
-            }
-        } catch (ConnectTimeoutException cte) {
-            log.debug("请求连接超时，由于 {}", cte.getLocalizedMessage());
-        } catch (SocketTimeoutException ste) {
-            log.debug("请求通信超时，由于 {}", ste.getLocalizedMessage());
-        } catch (ClientProtocolException cpe) {
-            log.debug("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于 {}", cpe.getLocalizedMessage());
-            cpe.printStackTrace();
-        } catch (IOException ie) {
-            log.debug("实体转换异常或者网络异常， 由于 {}", ie.getLocalizedMessage());
-        } finally {
-            try {
-                if (response != null) {
-                    response.close();
-                }
-            } catch (IOException e) {
-                log.debug("响应关闭异常， 由于 {}", e.getLocalizedMessage());
-            }
-            if (method != null) {
-                method.releaseConnection();
-            }
-        }
-        return content;
-    }
-
+    /**
+     * 读取response为字符串
+     * @param method
+     * @return
+     */
     private static String getResponseStr(HttpRequestBase method) {
-        RequestConfig config = RequestConfig.custom().setSocketTimeout(20000).build();
-        return getResponseStrWithRequestConfig(method, config);
+        return getResponseStrWithRequestConfig(method, null);
     }
 
+    /**
+     * 读取字符串，带有requestConfig参数
+     * @param method
+     * @param config
+     * @return
+     */
     private static String getResponseStrWithRequestConfig(HttpRequestBase method, RequestConfig config) {
-        HttpClientContext context = HttpClientContext.create();
-        CloseableHttpResponse response = null;
-        String content = RESPONSE_CONTENT;
-        try {
-            if (config != null) {
-                RequestConfig.Builder requestBuilder = RequestConfig.copy(requestConfigDefault);
-                if (-1 != config.getConnectTimeout()) {
-                    requestBuilder.setConnectTimeout(config.getConnectTimeout());
-                }
-                if (-1 != config.getSocketTimeout()) {
-                    requestBuilder.setSocketTimeout(config.getSocketTimeout());
-                }
-                if (-1 != config.getConnectionRequestTimeout()) {
-                    requestBuilder.setConnectionRequestTimeout(config.getConnectionRequestTimeout());
-                }
-                RequestConfig requestConfig = requestBuilder.build();
-                context.setRequestConfig(requestConfig);
-            }
-            response = client.execute(method, context);//执行GET/POST请求
-            HttpEntity entity = response.getEntity();//获取响应实体
-            if (entity != null) {
-                Charset charset = ContentType.getOrDefault(entity).getCharset();
-                content = EntityUtils.toString(entity, charset);
-                EntityUtils.consume(entity);
-            }
-        } catch (ConnectTimeoutException cte) {
-            log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
-        } catch (SocketTimeoutException ste) {
-            log.error("请求通信超时，由于-{},", ste.getLocalizedMessage(), ste);
-        } catch (ClientProtocolException cpe) {
-            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于-{}, ", cpe.getLocalizedMessage(), cpe);
-        } catch (IOException ie) {
-            log.error("实体转换异常或者网络异常， 由于-{},", ie.getLocalizedMessage(), ie);
-        } catch (Exception ie) {
-            log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
-        } finally {
-            try {
-                if (response != null) {
-                    response.close();
-                }
-
-            } catch (IOException e) {
-                log.error("响应关闭异常， 由于 " + e.getLocalizedMessage());
-            }
-
-            if (method != null) {
-                method.releaseConnection();
-            }
-
-        }
-
-        return content;
+        CloseableHttpResponse response = getResponseWithRequestConfig(method, config);
+        return parseResponseToStr(method, response);
     }
 
+    /**
+     * 获取请求的response
+     *
+     * @param method
+     * @param config
+     * @return
+     */
     public static CloseableHttpResponse getResponseWithRequestConfig(HttpRequestBase method, RequestConfig config) {
         HttpClientContext context = HttpClientContext.create();
         CloseableHttpResponse response = null;
-        String content = RESPONSE_CONTENT;
         try {
             if (config != null) {
                 RequestConfig.Builder requestBuilder = RequestConfig.copy(requestConfigDefault);
@@ -277,12 +204,6 @@ public class HttpClientUtil {
             }
             response = client.execute(method, context);//执行GET/POST请求
 
-            HttpEntity entity = response.getEntity();//获取响应实体
-            if (entity != null) {
-                Charset charset = ContentType.getOrDefault(entity).getCharset();
-                content = EntityUtils.toString(entity, charset);
-                EntityUtils.consume(entity);
-            }
         } catch (ConnectTimeoutException cte) {
             log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
         } catch (SocketTimeoutException ste) {
@@ -294,9 +215,9 @@ public class HttpClientUtil {
         } catch (Exception ie) {
             log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
         } finally {
-            if (method != null) {
-                method.releaseConnection();
-            }
+//            if (method != null) {
+//                method.releaseConnection();
+//            }
 
         }
 
@@ -305,40 +226,85 @@ public class HttpClientUtil {
 
     /**
      * 读取response为字符
+     *
      * @param response
      * @return
      */
-    public static String parseResponseToStr(CloseableHttpResponse response) {
+    public static String parseResponseToStr(HttpRequestBase method, CloseableHttpResponse response) {
         String content = null;
         try {
             HttpEntity entity = response.getEntity();//获取响应实体
             if (entity != null) {
                 Charset charset = ContentType.getOrDefault(entity).getCharset();
                 content = EntityUtils.toString(entity, charset);
-
             }
         } catch (IOException e) {
             log.error("parseResponseToStr catch error ,msg-{}", e.getMessage(), e);
         } finally {
-            closeResponse(response);
+            //关闭连接！！！
+            closeResponse(method, response);
         }
         return content;
     }
 
     /**
      * 关闭response
+     *
+     * @param method
      * @param response
      */
-    public static void closeResponse(CloseableHttpResponse response) {
+    public static void closeResponse(HttpRequestBase method, CloseableHttpResponse response) {
         try {
             if (response != null) {
                 EntityUtils.consume(response.getEntity());
                 response.close();
             }
+            if (method != null) {
+                method.releaseConnection();
+            }
         } catch (IOException e) {
             log.error("response close catch error ,msg-{}", e.getMessage(), e);
-            e.printStackTrace();
+//            e.printStackTrace();
         }
+    }
+
+    /**
+     * 字符串的post
+     *
+     * @param url
+     * @param jsonString
+     * @param headers
+     * @param config
+     * @return
+     */
+    public static CloseableHttpResponse doPostWithHeaderJsonString(String url, String jsonString, Map<String, String> headers, RequestConfig config) {
+        StringEntity stringEntity = null;
+        try {
+            stringEntity = new StringEntity(jsonString, Consts.UTF_8);
+        } catch (Exception e) {
+            log.error("StringEntity catch error,msg-{}", e.getLocalizedMessage(), e);
+        }
+        return doPostWithStringEntity(url, stringEntity, headers, config);
+    }
+
+
+    /**
+     * SringEntity 的post
+     *
+     * @param url
+     * @param stringEntity
+     * @param headers
+     * @param config
+     * @return
+     */
+    public static CloseableHttpResponse doPostWithStringEntity(String url, StringEntity stringEntity, Map<String, String> headers, RequestConfig config) {
+        HttpPost httpPost = new HttpPost(url);
+        headers.entrySet().stream().forEach(item -> {
+            httpPost.addHeader(item.getKey(), item.getValue());
+        });
+        stringEntity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
+        httpPost.setEntity(stringEntity);
+        return getResponseWithRequestConfig(httpPost, config);
     }
 
     public static String get(String url) {
@@ -346,81 +312,39 @@ public class HttpClientUtil {
         return getResponseStr(get);
     }
 
-    public static String get(String url, String cookie) {
-        HttpGet get = new HttpGet(url);
-        if (StringUtils.isNotBlank(cookie))
-            get.addHeader("cookie", cookie);
-        return getResponseStr(get);
-    }
 
-    public static byte[] getAsByte(String url) {
-        return get(url).getBytes();
-    }
-
-    public static String getHeaders(String url, String cookie, String headerName) {
-        HttpGet get = new HttpGet(url);
-        if (StringUtils.isNotBlank(cookie))
-            get.addHeader("cookie", cookie);
-        getResponseStr(get);
-        Header[] headers = get.getHeaders(headerName);
-        return headers == null ? null : headers.toString();
-    }
-
-    public static String getWithRealHeader(String url) {
-        HttpGet get = new HttpGet(url);
-        get.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        get.addHeader("Accept-Language", "zh-cn");
-        get.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3");
-        get.addHeader("Keep-Alive", "300");
-        get.addHeader("Connection", "Keep-Alive");
-        get.addHeader("Cache-Control", "no-cache");
-        return getResponseStr(get);
-    }
-
-    public static String post(String url, Map<String, String> param, String cookie) {
+    public static String doPost(String url, String jsonString) {
         HttpPost post = new HttpPost(url);
-        param.keySet().stream().forEach(key -> {
-            String value = param.get(key);
-            if (value != null)
-                post.addHeader(key, value);
-        });
-        if (StringUtils.isNotBlank(cookie))
-            post.addHeader("cookie", cookie);
-        return getResponseStr(post);
-    }
-
-    public String post(String url, String data) {
-        HttpPost post = new HttpPost(url);
-        if (StringUtils.isNotBlank(data)) {
+        if (StringUtils.isNotBlank(jsonString)) {
             post.addHeader("Content-Type", "application/json");
         }
-        post.setEntity(new StringEntity(data, ContentType.APPLICATION_JSON));
+        post.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
         return getResponseStr(post);
     }
 
-    public String post(String url, Map<String, String> param, String cookie, Map<String, String> headers) {
+    /**
+     * 需要UrlEncodedFormEntity传参的post请求
+     *
+     * @param url
+     * @param param
+     * @param headers
+     * @return
+     */
+    public static String doPostWithParam(String url, Map<String, String> param, Map<String, String> headers) {
         HttpPost post = new HttpPost(url);
-        String reqEntity = "";
-        for (Entry<String, String> entry : param.entrySet()) {
-            post.addHeader(entry.getKey(), entry.getValue());
-            try {
-                reqEntity += entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "utf-8") + "&";
-            } catch (UnsupportedEncodingException e) {
-                log.error("请求实体转换异常，不支持的字符集，由于 " + e.getLocalizedMessage());
-                e.printStackTrace();
-            }
-        }
-
         try {
-            post.setEntity(new StringEntity(reqEntity));
-        } catch (UnsupportedEncodingException e) {
-            log.error("请求设置实体异常，不支持的字符集， 由于 " + e.getLocalizedMessage());
-            e.printStackTrace();
+            List<NameValuePair> params = new ArrayList<>();
+            param.entrySet().stream().forEach(item -> {
+                params.add(new BasicNameValuePair(item.getKey(), item.getValue()));
+            });
+            headers.entrySet().stream().forEach(item -> {
+                post.addHeader(item.getKey(), item.getValue());
+            });
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+            post.setEntity(urlEncodedFormEntity);
+        } catch (Exception e) {
+            log.error("doPostWithParam catch error， msg-{}, " + e.getLocalizedMessage(), e);
         }
-
-        if (StringUtils.isNotEmpty(cookie))
-            post.addHeader("cookie", cookie);
-
         return getResponseStr(post);
     }
 }
