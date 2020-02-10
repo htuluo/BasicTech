@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 测试
+ *
  * @RestController 注解等同于@Controller @ResponseBody两个注解的合用，
  * 如果RestController有value属性，需要对应RequestMapping注解
  */
@@ -28,5 +29,16 @@ public class TestController {
             e.printStackTrace();
         }
         return "you are calling the " + str;
+    }
+
+    @PostMapping("post")
+    public String post(@RequestBody String string) {
+        log.info("post start ");
+        try {
+            TimeUnit.SECONDS.sleep(8);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "you are post the "+string;
     }
 }

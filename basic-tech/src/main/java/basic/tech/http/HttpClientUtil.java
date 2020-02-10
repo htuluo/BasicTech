@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * httpclient请求utils
+ *
  * @author luolm
  * @date 2020-02-10
  */
@@ -162,6 +163,7 @@ public class HttpClientUtil {
 
     /**
      * 读取response为字符串
+     *
      * @param method
      * @return
      */
@@ -171,13 +173,14 @@ public class HttpClientUtil {
 
     /**
      * 读取字符串，带有requestConfig参数
+     *
      * @param method
      * @param config
      * @return
      */
     private static String getResponseStrWithRequestConfig(HttpRequestBase method, RequestConfig config) {
         CloseableHttpResponse response = getResponseWithRequestConfig(method, config);
-        return parseResponseToStr(method, response);
+        return parseResponseToStr(response, method);
     }
 
     /**
@@ -233,9 +236,12 @@ public class HttpClientUtil {
      * @param response
      * @return
      */
-    public static String parseResponseToStr(HttpRequestBase method, CloseableHttpResponse response) {
+    public static String parseResponseToStr(CloseableHttpResponse response, HttpRequestBase method) {
         String content = null;
         try {
+            if (null == response) {
+                return content;
+            }
             HttpEntity entity = response.getEntity();//获取响应实体
             if (entity != null) {
                 Charset charset = ContentType.getOrDefault(entity).getCharset();
@@ -245,7 +251,7 @@ public class HttpClientUtil {
             log.error("parseResponseToStr catch error ,msg-{}", e.getMessage(), e);
         } finally {
             //关闭连接！！！
-            closeResponse(method, response);
+            closeResponse(response, method);
         }
         return content;
     }
@@ -253,20 +259,20 @@ public class HttpClientUtil {
     /**
      * 关闭response
      *
-     * @param method
      * @param response
+     * @param method
      */
-    public static void closeResponse(HttpRequestBase method, CloseableHttpResponse response) {
+    public static void closeResponse(CloseableHttpResponse response, HttpRequestBase method) {
         try {
             if (response != null) {
                 EntityUtils.consume(response.getEntity());
                 response.close();
             }
-            if (method != null) {
-                method.releaseConnection();
-            }
+//            if (method != null) {
+//                method.releaseConnection();
+//            }
         } catch (IOException e) {
-            log.error("response close catch error ,msg-{}", e.getMessage(), e);
+            log.error("closeResponse catch error ,msg-{}", e.getMessage(), e);
 //            e.printStackTrace();
         }
     }
@@ -302,9 +308,11 @@ public class HttpClientUtil {
      */
     public static CloseableHttpResponse doPostWithStringEntity(String url, StringEntity stringEntity, Map<String, String> headers, RequestConfig config) {
         HttpPost httpPost = new HttpPost(url);
-        headers.entrySet().stream().forEach(item -> {
-            httpPost.addHeader(item.getKey(), item.getValue());
-        });
+        if (null != headers && !headers.isEmpty()) {
+            headers.entrySet().stream().forEach(item -> {
+                httpPost.addHeader(item.getKey(), item.getValue());
+            });
+        }
         stringEntity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         httpPost.setEntity(stringEntity);
         return getResponseWithRequestConfig(httpPost, config);
@@ -337,12 +345,16 @@ public class HttpClientUtil {
         HttpPost post = new HttpPost(url);
         try {
             List<NameValuePair> params = new ArrayList<>();
-            param.entrySet().stream().forEach(item -> {
-                params.add(new BasicNameValuePair(item.getKey(), item.getValue()));
-            });
-            headers.entrySet().stream().forEach(item -> {
-                post.addHeader(item.getKey(), item.getValue());
-            });
+            if (null != param && !param.isEmpty()) {
+                param.entrySet().stream().forEach(item -> {
+                    params.add(new BasicNameValuePair(item.getKey(), item.getValue()));
+                });
+            }
+            if (null != headers && !headers.isEmpty()) {
+                headers.entrySet().stream().forEach(item -> {
+                    post.addHeader(item.getKey(), item.getValue());
+                });
+            }
             UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, Consts.UTF_8);
             post.setEntity(urlEncodedFormEntity);
         } catch (Exception e) {
