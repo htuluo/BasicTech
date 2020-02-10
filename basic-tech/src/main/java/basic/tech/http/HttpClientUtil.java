@@ -66,7 +66,7 @@ public class HttpClientUtil {
 
     private static final int CONNECT_ROUTE = 20;//设置每个路由的基础连接数
 
-    private static final int VALIDATE_TIME = 30000;//设置重用连接时间
+    private static final int VALIDATE_TIME = 10000;//设置重用连接时间
 
     private static final String RESPONSE_CONTENT = "通信失败";
 
@@ -221,59 +221,38 @@ public class HttpClientUtil {
         } catch (Exception ie) {
             log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
         } finally {
-//            if (method != null) {
-//                method.releaseConnection();
-//            }
 
         }
-
         return response;
-    }
-
-    /**
-     * 读取response为字符
-     *
-     * @param response
-     * @return
-     */
-    public static String parseResponseToStr(CloseableHttpResponse response, HttpRequestBase method) {
-        String content = null;
-        try {
-            if (null == response) {
-                return content;
-            }
-            HttpEntity entity = response.getEntity();//获取响应实体
-            if (entity != null) {
-                Charset charset = ContentType.getOrDefault(entity).getCharset();
-                content = EntityUtils.toString(entity, charset);
-            }
-        } catch (IOException e) {
-            log.error("parseResponseToStr catch error ,msg-{}", e.getMessage(), e);
-        } finally {
-            //关闭连接！！！
-            closeResponse(response, method);
-        }
-        return content;
     }
 
     /**
      * 关闭response
      *
      * @param response
-     * @param method
      */
+    public static void closeResponse(CloseableHttpResponse response) {
+        closeResponse(response, null);
+    }
+
+    /**
+     * 关闭response,带有httpMethod
+     *
+     * @param response
+     * @param method httpMethod
+     */
+
     public static void closeResponse(CloseableHttpResponse response, HttpRequestBase method) {
         try {
             if (response != null) {
                 EntityUtils.consume(response.getEntity());
                 response.close();
             }
-//            if (method != null) {
-//                method.releaseConnection();
-//            }
+            if (method != null) {
+                method.releaseConnection();
+            }
         } catch (IOException e) {
             log.error("closeResponse catch error ,msg-{}", e.getMessage(), e);
-//            e.printStackTrace();
         }
     }
 
@@ -286,7 +265,8 @@ public class HttpClientUtil {
      * @param config
      * @return
      */
-    public static CloseableHttpResponse doPostWithHeaderJsonString(String url, String jsonString, Map<String, String> headers, RequestConfig config) {
+    public static CloseableHttpResponse doPostWithHeaderJsonString(String url, String
+            jsonString, Map<String, String> headers, RequestConfig config) {
         StringEntity stringEntity = null;
         try {
             stringEntity = new StringEntity(jsonString, Consts.UTF_8);
@@ -306,7 +286,8 @@ public class HttpClientUtil {
      * @param config
      * @return
      */
-    public static CloseableHttpResponse doPostWithStringEntity(String url, StringEntity stringEntity, Map<String, String> headers, RequestConfig config) {
+    public static CloseableHttpResponse doPostWithStringEntity(String url, StringEntity
+            stringEntity, Map<String, String> headers, RequestConfig config) {
         HttpPost httpPost = new HttpPost(url);
         if (null != headers && !headers.isEmpty()) {
             headers.entrySet().stream().forEach(item -> {
@@ -362,4 +343,33 @@ public class HttpClientUtil {
         }
         return getResponseStr(post);
     }
+
+
+    /**
+     * 读取response为字符
+     *
+     * @param response
+     * @return
+     */
+    public static String parseResponseToStr(CloseableHttpResponse response, HttpRequestBase method) {
+        String content = null;
+        try {
+            if (null == response) {
+                return content;
+            }
+            HttpEntity entity = response.getEntity();//获取响应实体
+            if (entity != null) {
+                Charset charset = ContentType.getOrDefault(entity).getCharset();
+                content = EntityUtils.toString(entity, charset);
+            }
+        } catch (IOException e) {
+            log.error("parseResponseToStr catch error ,msg-{}", e.getMessage(), e);
+        } finally {
+            //关闭连接！！！
+            closeResponse(response, method);
+        }
+        return content;
+    }
 }
+
+
