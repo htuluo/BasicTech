@@ -96,7 +96,7 @@ public class HttpClientUtil {
                 //实现了HttpRequestRetryHandler接口的
                 //public boolean retryRequest(IOException exception, int executionCount, HttpContext context)方法
                 (exception, executionCount, context) -> {
-                    if (executionCount >= 3)
+                    if (executionCount >= 1)
                         return false;
                     if (exception instanceof NoHttpResponseException)//如果服务器断掉了连接那么重试
                         return true;
@@ -197,8 +197,8 @@ public class HttpClientUtil {
     }
 
     private static String getResponseStr(HttpRequestBase method) {
-
-        return getResponseStrWithRequestConfig(method, null);
+        RequestConfig config = RequestConfig.custom().setSocketTimeout(20000).build();
+        return getResponseStrWithRequestConfig(method, config);
     }
 
     private static String getResponseStrWithRequestConfig(HttpRequestBase method, RequestConfig config) {
@@ -206,11 +206,18 @@ public class HttpClientUtil {
         CloseableHttpResponse response = null;
         String content = RESPONSE_CONTENT;
         try {
-            if(config!=null) {
-                RequestConfig requestConfig = RequestConfig.copy(requestConfigDefault)
-                        .setConnectTimeout(1000)
-                        .setConnectionRequestTimeout(20000)
-                        .setSocketTimeout(config.getSocketTimeout()).build();
+            if (config != null) {
+                RequestConfig.Builder requestBuilder = RequestConfig.copy(requestConfigDefault);
+                if (-1 != config.getConnectTimeout()) {
+                    requestBuilder.setConnectTimeout(config.getConnectTimeout());
+                }
+                if (-1 != config.getSocketTimeout()) {
+                    requestBuilder.setSocketTimeout(config.getSocketTimeout());
+                }
+                if (-1 != config.getConnectionRequestTimeout()) {
+                    requestBuilder.setConnectionRequestTimeout(config.getConnectionRequestTimeout());
+                }
+                RequestConfig requestConfig = requestBuilder.build();
                 context.setRequestConfig(requestConfig);
             }
             response = client.execute(method, context);//执行GET/POST请求
@@ -221,17 +228,15 @@ public class HttpClientUtil {
                 EntityUtils.consume(entity);
             }
         } catch (ConnectTimeoutException cte) {
-            log.error("请求连接超时，由于 " + cte.getLocalizedMessage());
-            cte.printStackTrace();
+            log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
         } catch (SocketTimeoutException ste) {
-            log.error("请求通信超时，由于 " + ste.getLocalizedMessage());
-            ste.printStackTrace();
+            log.error("请求通信超时，由于-{},", ste.getLocalizedMessage(), ste);
         } catch (ClientProtocolException cpe) {
-            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于 " + cpe.getLocalizedMessage());
-            cpe.printStackTrace();
+            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于-{}, ", cpe.getLocalizedMessage(), cpe);
         } catch (IOException ie) {
-            log.error("实体转换异常或者网络异常， 由于 " + ie.getLocalizedMessage());
-            ie.printStackTrace();
+            log.error("实体转换异常或者网络异常， 由于-{},", ie.getLocalizedMessage(), ie);
+        } catch (Exception ie) {
+            log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
         } finally {
             try {
                 if (response != null) {
@@ -249,6 +254,91 @@ public class HttpClientUtil {
         }
 
         return content;
+    }
+
+    public static CloseableHttpResponse getResponseWithRequestConfig(HttpRequestBase method, RequestConfig config) {
+        HttpClientContext context = HttpClientContext.create();
+        CloseableHttpResponse response = null;
+        String content = RESPONSE_CONTENT;
+        try {
+            if (config != null) {
+                RequestConfig.Builder requestBuilder = RequestConfig.copy(requestConfigDefault);
+                if (-1 != config.getConnectTimeout()) {
+                    requestBuilder.setConnectTimeout(config.getConnectTimeout());
+                }
+                if (-1 != config.getSocketTimeout()) {
+                    requestBuilder.setSocketTimeout(config.getSocketTimeout());
+                }
+                if (-1 != config.getConnectionRequestTimeout()) {
+                    requestBuilder.setConnectionRequestTimeout(config.getConnectionRequestTimeout());
+                }
+                RequestConfig requestConfig = requestBuilder.build();
+                context.setRequestConfig(requestConfig);
+            }
+            response = client.execute(method, context);//执行GET/POST请求
+
+            HttpEntity entity = response.getEntity();//获取响应实体
+            if (entity != null) {
+                Charset charset = ContentType.getOrDefault(entity).getCharset();
+                content = EntityUtils.toString(entity, charset);
+                EntityUtils.consume(entity);
+            }
+        } catch (ConnectTimeoutException cte) {
+            log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
+        } catch (SocketTimeoutException ste) {
+            log.error("请求通信超时，由于-{},", ste.getLocalizedMessage(), ste);
+        } catch (ClientProtocolException cpe) {
+            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于-{}, ", cpe.getLocalizedMessage(), cpe);
+        } catch (IOException ie) {
+            log.error("实体转换异常或者网络异常， 由于-{},", ie.getLocalizedMessage(), ie);
+        } catch (Exception ie) {
+            log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
+        } finally {
+            if (method != null) {
+                method.releaseConnection();
+            }
+
+        }
+
+        return response;
+    }
+
+    /**
+     * 读取response为字符
+     * @param response
+     * @return
+     */
+    public static String parseResponseToStr(CloseableHttpResponse response) {
+        String content = null;
+        try {
+            HttpEntity entity = response.getEntity();//获取响应实体
+            if (entity != null) {
+                Charset charset = ContentType.getOrDefault(entity).getCharset();
+                content = EntityUtils.toString(entity, charset);
+
+            }
+        } catch (IOException e) {
+            log.error("parseResponseToStr catch error ,msg-{}", e.getMessage(), e);
+        } finally {
+            closeResponse(response);
+        }
+        return content;
+    }
+
+    /**
+     * 关闭response
+     * @param response
+     */
+    public static void closeResponse(CloseableHttpResponse response) {
+        try {
+            if (response != null) {
+                EntityUtils.consume(response.getEntity());
+                response.close();
+            }
+        } catch (IOException e) {
+            log.error("response close catch error ,msg-{}", e.getMessage(), e);
+            e.printStackTrace();
+        }
     }
 
     public static String get(String url) {
