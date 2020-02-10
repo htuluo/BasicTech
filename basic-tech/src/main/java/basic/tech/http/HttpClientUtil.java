@@ -57,7 +57,7 @@ public class HttpClientUtil {
 
     private static final int SOCKET_TIMEOUT = 10000;//设置传输毫秒数
 
-    private static final int REQUESTCONNECT_TIMEOUT = 3000;//获取请求超时毫秒数
+    private static final int REQUESTCONNECT_TIMEOUT = 3000;//获取连接池请求超时毫秒数
 
     private static final int CONNECT_TOTAL = 200;//最大连接数
 
@@ -71,8 +71,6 @@ public class HttpClientUtil {
 
     private static CloseableHttpClient client = null;
     private static RequestConfig requestConfigDefault;
-    private static ThreadLocal<RequestConfig> threadRequestConfig;
-
 
     static {
         ConnectionSocketFactory csf = PlainConnectionSocketFactory.getSocketFactory();
@@ -119,6 +117,9 @@ public class HttpClientUtil {
         }
     }
 
+    /**
+     * @return
+     */
     private static SSLConnectionSocketFactory createSSLConnSocketFactory() {
         SSLConnectionSocketFactory sslsf = null;
         SSLContext context;
@@ -148,11 +149,11 @@ public class HttpClientUtil {
                         new TrustManager[]{x509m},
                         new java.security.SecureRandom());
             } catch (KeyManagementException e) {
-                log.debug("SSL上下文初始化失败， 由于 {}", e.getLocalizedMessage());
+                log.warn("SSL上下文初始化失败， 由于 {}", e.getLocalizedMessage());
             }
             sslsf = new SSLConnectionSocketFactory(context, NoopHostnameVerifier.INSTANCE);
         } catch (NoSuchAlgorithmException e) {
-            log.debug("SSL上下文创建失败，由于 {}", e.getLocalizedMessage());
+            log.warn("SSL上下文创建失败，由于 {}", e.getLocalizedMessage());
         }
         return sslsf;
     }
