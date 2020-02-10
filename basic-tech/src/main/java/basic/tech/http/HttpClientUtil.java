@@ -47,7 +47,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Qian Wenjin
+ * httpclient请求utils
+ * @author luolm
+ * @date 2020-02-10
  */
 public class HttpClientUtil {
 
