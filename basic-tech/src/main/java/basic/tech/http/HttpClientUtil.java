@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * httpclient请求utils
+ * 使用httpclient4.5.3版本
  *
  * @author luolm
  * @date 2020-02-10
