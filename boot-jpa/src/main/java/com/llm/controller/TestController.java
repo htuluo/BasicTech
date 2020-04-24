@@ -24,9 +24,13 @@ public class TestController {
     public String get(String str) {
         log.info("get start ");
         try {
-            TimeUnit.SECONDS.sleep(10);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        if(1==1){
+//            return null;
+            throw new RuntimeException("aa");
         }
         return "you are calling the " + str;
     }

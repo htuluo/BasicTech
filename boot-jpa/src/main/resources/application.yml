@@ -5,3 +5,5 @@ spring:
     hibernate:
       hbm2ddl:
         auto: update
+server:
+  connection-timeout: 2000
