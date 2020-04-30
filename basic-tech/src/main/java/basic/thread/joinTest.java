@@ -1,5 +1,10 @@
 package basic.thread;
 
+
+import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.*;
+
 /**
  * Created by dell-3020 on 2017/9/27.
  */
@@ -52,5 +57,22 @@ public class joinTest {
 //        }
 
 
+    }
+
+    @Test
+    public void test(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 30l, TimeUnit.SECONDS, new ArrayBlockingQueue<>(30), new ThreadPoolExecutor.AbortPolicy());
+        for(int i=0;i<40;i++) {
+            int finalI = i;
+            threadPoolExecutor.submit(() -> {
+               System.out.println("i===="+ finalI+"  "+ java.lang.Thread.currentThread().getName());
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        System.out.println("aaaaaa");
     }
 }
