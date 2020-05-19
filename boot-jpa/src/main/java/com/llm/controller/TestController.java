@@ -24,7 +24,7 @@ public class TestController {
     public String get(String str) {
         log.info("get start ");
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(75);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
