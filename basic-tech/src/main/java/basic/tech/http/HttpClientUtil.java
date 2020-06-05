@@ -1,24 +1,7 @@
 package basic.tech.http;
 
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.*;
-
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -45,13 +28,26 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * httpclient请求utils
  * 使用httpclient4.5.3版本
  *
  * @author luolm
- * @date 2020-02-10
  */
 public class HttpClientUtil {
 
@@ -59,65 +55,77 @@ public class HttpClientUtil {
 
     private static final int CONNECT_TIMEOUT = 5000;//设置超时毫秒数
 
-    private static final int SOCKET_TIMEOUT = 10000;//设置传输毫秒数
+    private static final int SOCKET_TIMEOUT = 30000;//设置传输毫秒数
 
     private static final int REQUESTCONNECT_TIMEOUT = 3000;//获取连接池请求超时毫秒数
 
-    private static final int CONNECT_TOTAL = 200;//最大连接数
+    private static final int CONNECT_TOTAL = 30;//最大连接数
 
-    private static final int CONNECT_ROUTE = 20;//设置每个路由的基础连接数
+    private static final int CONNECT_ROUTE = 50;//设置每个路由的基础连接数
 
     private static final int VALIDATE_TIME = 10000;//设置重用连接时间
 
-    private static final String RESPONSE_CONTENT = "通信失败";
+    private static PoolingHttpClientConnectionManager MANAGER = null;
 
-    private static PoolingHttpClientConnectionManager manager = null;
-
-    private static CloseableHttpClient client = null;
-    private static RequestConfig requestConfigDefault;
+    private static CloseableHttpClient CLIENT = null;
+    private static RequestConfig REQUEST_CONFIG_DEFAULT;
 
     static {
         ConnectionSocketFactory csf = PlainConnectionSocketFactory.getSocketFactory();
         LayeredConnectionSocketFactory lsf = createSSLConnSocketFactory();
         Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", csf).register("https", lsf).build();
-        manager = new PoolingHttpClientConnectionManager(registry);
-        manager.setMaxTotal(CONNECT_TOTAL);
-        manager.setDefaultMaxPerRoute(CONNECT_ROUTE);
-        manager.setValidateAfterInactivity(VALIDATE_TIME);
+            .register("http", csf).register("https", lsf).build();
+        MANAGER = new PoolingHttpClientConnectionManager(registry);
+        MANAGER.setMaxTotal(CONNECT_TOTAL);
+        MANAGER.setDefaultMaxPerRoute(CONNECT_ROUTE);
+        MANAGER.setValidateAfterInactivity(VALIDATE_TIME);
         SocketConfig config = SocketConfig.custom().setSoTimeout(SOCKET_TIMEOUT).build();
-        manager.setDefaultSocketConfig(config);
-        requestConfigDefault = RequestConfig.custom()
-                .setConnectTimeout(CONNECT_TIMEOUT)
-                .setConnectionRequestTimeout(REQUESTCONNECT_TIMEOUT)
-                .setSocketTimeout(SOCKET_TIMEOUT).build();
-        client = HttpClients.custom().setConnectionManager(manager).setDefaultRequestConfig(requestConfigDefault).setRetryHandler(
-                //实现了HttpRequestRetryHandler接口的
-                //public boolean retryRequest(IOException exception, int executionCount, HttpContext context)方法
-                (exception, executionCount, context) -> {
-                    if (executionCount >= 1)
-                        return false;
-                    if (exception instanceof NoHttpResponseException)//如果服务器断掉了连接那么重试
-                        return true;
-                    if (exception instanceof SSLHandshakeException)//不重试握手异常
-                        return false;
-                    if (exception instanceof InterruptedIOException)//IO传输中断重试
-                        return true;
-                    if (exception instanceof UnknownHostException)//未知服务器
-                        return false;
-                    if (exception instanceof ConnectTimeoutException)//超时就重试
-                        return true;
-                    if (exception instanceof SSLException)
-                        return false;
-
-                    HttpClientContext cliContext = HttpClientContext.adapt(context);
-                    HttpRequest request = cliContext.getRequest();
-                    if (!(request instanceof HttpEntityEnclosingRequest))
-                        return true;
+        MANAGER.setDefaultSocketConfig(config);
+        REQUEST_CONFIG_DEFAULT = RequestConfig.custom()
+            .setConnectTimeout(CONNECT_TIMEOUT)
+            .setConnectionRequestTimeout(REQUESTCONNECT_TIMEOUT)
+            .setSocketTimeout(SOCKET_TIMEOUT).build();
+        CLIENT = HttpClients.custom().setConnectionManager(MANAGER).setDefaultRequestConfig(REQUEST_CONFIG_DEFAULT).setRetryHandler(
+            //实现了HttpRequestRetryHandler接口的
+            //public boolean retryRequest(IOException exception, int executionCount, HttpContext context)方法
+            (exception, executionCount, context) -> {
+                if (executionCount >= 1) {
+                    //重试次数1次，先不重试
                     return false;
-                }).build();
-        if (manager != null && manager.getTotalStats() != null) {
-            log.info("客户池状态：" + manager.getTotalStats().toString());
+                }
+                if (exception instanceof NoHttpResponseException) {
+                    //如果服务器断掉了连接那么重试
+                    return true;
+                }
+                if (exception instanceof SSLHandshakeException) {
+                    //不重试握手异常
+                    return false;
+                }
+                if (exception instanceof InterruptedIOException) {
+                    //IO传输中断重试
+                    return true;
+                }
+                if (exception instanceof UnknownHostException) {
+                    //未知服务器
+                    return false;
+                }
+                if (exception instanceof ConnectTimeoutException) {
+                    //超时就重试
+                    return true;
+                }
+                if (exception instanceof SSLException) {
+                    return false;
+                }
+
+                HttpClientContext cliContext = HttpClientContext.adapt(context);
+                HttpRequest request = cliContext.getRequest();
+                if (!(request instanceof HttpEntityEnclosingRequest)) {
+                    return true;
+                }
+                return false;
+            }).build();
+        if (MANAGER != null && MANAGER.getTotalStats() != null) {
+            log.info("客户池状态：" + MANAGER.getTotalStats().toString());
         }
     }
 
@@ -150,8 +158,8 @@ public class HttpClientUtil {
             try {
                 //最关键的必须有这一步，否则抛出SSLContextImpl未被初始化的异常
                 context.init(null,
-                        new TrustManager[]{x509m},
-                        new java.security.SecureRandom());
+                    new TrustManager[]{x509m},
+                    new java.security.SecureRandom());
             } catch (KeyManagementException e) {
                 log.warn("SSL上下文初始化失败， 由于 {}", e.getLocalizedMessage());
             }
@@ -163,24 +171,15 @@ public class HttpClientUtil {
     }
 
     /**
-     * 读取response为字符串
-     *
-     * @param method
-     * @return
-     */
-    private static String getResponseStr(HttpRequestBase method) {
-        return getResponseStrWithRequestConfig(method, null);
-    }
-
-    /**
      * 读取字符串，带有requestConfig参数
      *
      * @param method
+     * @param headers
      * @param config
      * @return
      */
-    private static String getResponseStrWithRequestConfig(HttpRequestBase method, RequestConfig config) {
-        CloseableHttpResponse response = getResponseWithRequestConfig(method, config);
+    private static String getResponseStrWithRequestConfig(HttpRequestBase method, Map<String, String> headers, RequestConfig config) throws Exception {
+        CloseableHttpResponse response = getResponseWithRequestConfig(method, headers, config);
         return parseResponseToStr(response, method);
     }
 
@@ -188,15 +187,16 @@ public class HttpClientUtil {
      * 获取请求的response
      *
      * @param method
+     * @param headers
      * @param config
      * @return
      */
-    public static CloseableHttpResponse getResponseWithRequestConfig(HttpRequestBase method, RequestConfig config) {
+    public static CloseableHttpResponse getResponseWithRequestConfig(HttpRequestBase method, Map<String, String> headers, RequestConfig config) throws Exception {
         HttpClientContext context = HttpClientContext.create();
         CloseableHttpResponse response = null;
         try {
             if (config != null) {
-                RequestConfig.Builder requestBuilder = RequestConfig.copy(requestConfigDefault);
+                RequestConfig.Builder requestBuilder = RequestConfig.copy(REQUEST_CONFIG_DEFAULT);
                 if (-1 != config.getConnectTimeout()) {
                     requestBuilder.setConnectTimeout(config.getConnectTimeout());
                 }
@@ -206,21 +206,33 @@ public class HttpClientUtil {
                 if (-1 != config.getConnectionRequestTimeout()) {
                     requestBuilder.setConnectionRequestTimeout(config.getConnectionRequestTimeout());
                 }
+                if(!config.getCookieSpec().isEmpty()){
+                    requestBuilder.setCookieSpec(config.getCookieSpec());
+                }
                 RequestConfig requestConfig = requestBuilder.build();
                 context.setRequestConfig(requestConfig);
-            }
-            response = client.execute(method, context);//执行GET/POST请求
 
-        } catch (ConnectTimeoutException cte) {
-            log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
-        } catch (SocketTimeoutException ste) {
-            log.error("请求通信超时，由于-{},", ste.getLocalizedMessage(), ste);
-        } catch (ClientProtocolException cpe) {
-            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于-{}, ", cpe.getLocalizedMessage(), cpe);
-        } catch (IOException ie) {
-            log.error("实体转换异常或者网络异常， 由于-{},", ie.getLocalizedMessage(), ie);
+            }
+            if (null != headers && !headers.isEmpty()) {
+                headers.entrySet().stream().forEach(item -> {
+                    method.addHeader(item.getKey(), item.getValue());
+                });
+            }
+            response = CLIENT.execute(method, context);//执行GET/POST请求
+        }
+//        catch (ConnectTimeoutException cte) {
+//            log.error("请求连接超时，由于-{},", cte.getLocalizedMessage(), cte);
+//        } catch (SocketTimeoutException ste) {
+//            log.error("请求通信超时，由于-{},", ste.getLocalizedMessage(), ste);
+//        } catch (ClientProtocolException cpe) {
+//            log.error("协议错误（比如构造HttpGet对象时传入协议不对(将'http'写成'htp')or响应内容不符合），由于-{}, ", cpe.getLocalizedMessage(), cpe);
+//        }
+        catch (IOException ie) {
+            log.warn("实体转换异常或者网络异常， 由于-{},", ie.getLocalizedMessage(), ie);
+            throw new IOException(ie);
         } catch (Exception ie) {
-            log.error("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
+            log.warn("出现异常， 由于-{},", ie.getLocalizedMessage(), ie);
+            throw new Exception(ie);
         } finally {
 
         }
@@ -240,7 +252,7 @@ public class HttpClientUtil {
      * 关闭response,带有httpMethod
      *
      * @param response
-     * @param method httpMethod
+     * @param method   httpMethod
      */
 
     public static void closeResponse(CloseableHttpResponse response, HttpRequestBase method) {
@@ -266,14 +278,9 @@ public class HttpClientUtil {
      * @param config
      * @return
      */
-    public static CloseableHttpResponse doPostWithHeaderJsonString(String url, String
-            jsonString, Map<String, String> headers, RequestConfig config) {
+    public static CloseableHttpResponse doPostWithHeaderJsonString(String url, String jsonString, Map<String, String> headers, RequestConfig config) throws Exception {
         StringEntity stringEntity = null;
-        try {
-            stringEntity = new StringEntity(jsonString, Consts.UTF_8);
-        } catch (Exception e) {
-            log.error("StringEntity catch error,msg-{}", e.getLocalizedMessage(), e);
-        }
+        stringEntity = new StringEntity(jsonString, Consts.UTF_8);
         return doPostWithStringEntity(url, stringEntity, headers, config);
     }
 
@@ -288,31 +295,84 @@ public class HttpClientUtil {
      * @return
      */
     public static CloseableHttpResponse doPostWithStringEntity(String url, StringEntity
-            stringEntity, Map<String, String> headers, RequestConfig config) {
+        stringEntity, Map<String, String> headers, RequestConfig config) throws Exception {
         HttpPost httpPost = new HttpPost(url);
-        if (null != headers && !headers.isEmpty()) {
-            headers.entrySet().stream().forEach(item -> {
-                httpPost.addHeader(item.getKey(), item.getValue());
-            });
-        }
+
         stringEntity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         httpPost.setEntity(stringEntity);
-        return getResponseWithRequestConfig(httpPost, config);
+        return getResponseWithRequestConfig(httpPost, headers, config);
     }
 
-    public static String get(String url) {
+    /**
+     * Get请求
+     *
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    public static String doGet(String url) throws Exception {
         HttpGet get = new HttpGet(url);
-        return getResponseStr(get);
+        return getResponseStrWithRequestConfig(get, null, null);
+    }
+
+    /**
+     * 短连接请求
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    public static String doGetWithHeaderCloseConnection(String url) throws Exception {
+        HttpGet get = new HttpGet(url);
+        Map<String, String> header = new HashMap<>();
+        header.put("Connection", "close");
+        return getResponseStrWithRequestConfig(get, header, null);
+    }
+
+    /**
+     * 短连接请求
+     * @param url
+     * @param socketTimeOut
+     * @return
+     * @throws Exception
+     */
+    public static String doGetWithTimeOut(String url, int socketTimeOut) throws Exception {
+        HttpGet get = new HttpGet(url);
+        Map<String, String> header = new HashMap<>();
+        header.put("Connection", "close");
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(socketTimeOut * 1000).build();
+        return getResponseStrWithRequestConfig(get, header, requestConfig);
     }
 
 
-    public static String doPost(String url, String jsonString) {
+    /**
+     * 带headers的GET
+     *
+     * @param url
+     * @param headers
+     * @return
+     * @throws Exception
+     */
+    public static String doGet(String url, Map<String, String> headers) throws Exception {
+        HttpGet get = new HttpGet(url);
+        return getResponseStrWithRequestConfig(get, headers, null);
+    }
+
+
+    /**
+     * json post请求
+     *
+     * @param url
+     * @param jsonString
+     * @return
+     * @throws Exception
+     */
+    public static String doPost(String url, String jsonString) throws Exception {
         HttpPost post = new HttpPost(url);
         if (StringUtils.isNotBlank(jsonString)) {
             post.addHeader("Content-Type", "application/json");
         }
         post.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
-        return getResponseStr(post);
+        return getResponseStrWithRequestConfig(post, null, null);
     }
 
     /**
@@ -323,26 +383,19 @@ public class HttpClientUtil {
      * @param headers
      * @return
      */
-    public static String doPostWithParam(String url, Map<String, String> param, Map<String, String> headers) {
+    public static String doPostWithUrlParam(String url, Map<String, String> param, Map<String, String> headers) throws Exception {
         HttpPost post = new HttpPost(url);
-        try {
-            List<NameValuePair> params = new ArrayList<>();
-            if (null != param && !param.isEmpty()) {
-                param.entrySet().stream().forEach(item -> {
-                    params.add(new BasicNameValuePair(item.getKey(), item.getValue()));
-                });
-            }
-            if (null != headers && !headers.isEmpty()) {
-                headers.entrySet().stream().forEach(item -> {
-                    post.addHeader(item.getKey(), item.getValue());
-                });
-            }
-            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, Consts.UTF_8);
-            post.setEntity(urlEncodedFormEntity);
-        } catch (Exception e) {
-            log.error("doPostWithParam catch error， msg-{}, " + e.getLocalizedMessage(), e);
+
+        List<NameValuePair> params = new ArrayList<>();
+        if (null != param && !param.isEmpty()) {
+            param.entrySet().stream().forEach(item -> {
+                params.add(new BasicNameValuePair(item.getKey(), item.getValue()));
+            });
         }
-        return getResponseStr(post);
+        UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(params, Consts.UTF_8);
+        post.setEntity(urlEncodedFormEntity);
+
+        return getResponseStrWithRequestConfig(post, headers, null);
     }
 
 
