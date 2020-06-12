@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @description: QPS
@@ -14,15 +15,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class Meituan {
 
-    private static Map<String, Integer> map = new HashMap<>();
+    private static Map<String, AtomicInteger> map = new HashMap<>();
 
     static {
         long time = System.currentTimeMillis() / 1000;
-        map.put(String.valueOf(time), 10);
+        map.put(String.valueOf(time), new AtomicInteger(20));
     }
 
     public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5000);
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(10000);
 
         Meituan main = new Meituan();
         main.setFunctionName("main");
@@ -83,23 +84,26 @@ public class Meituan {
     public boolean qps2() {
         String seconds = String.valueOf(System.currentTimeMillis() / 1000);
         if (!map.containsKey(seconds)) {
-            map.put(seconds, 20);
+            map.put(seconds, new AtomicInteger(20));
             return true;
         }
-        Integer integer = map.get(seconds).intValue() - 1;
-        try {
-            Random random = new Random();
-            int i1 = random.nextInt(100);
-            TimeUnit.MILLISECONDS.sleep(i1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Integer value = map.put(seconds, integer);
-        System.out.println("key:" + seconds + " before:" + value + " after:" + integer);
-        if (value < 0) {
-            return false;
-        }
-        return true;
+//        synchronized (map) {
+        AtomicInteger atomicInteger = map.get(seconds);
+        Integer integer = atomicInteger.getAndDecrement();
+//            try {
+//                Random random = new Random();
+//                int i1 = random.nextInt(100);
+//                TimeUnit.MILLISECONDS.sleep(i1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            AtomicInteger value = map.put(seconds, atomicInteger);
+            System.out.println("key:" + seconds + " before:" + value.get() + " after:" + integer);
+            if (value.get() < 0) {
+                return false;
+            }
+            return true;
+//        }
 
     }
 }
