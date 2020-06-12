@@ -2,6 +2,9 @@ package basic.tech.thread;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ThreadLamda {
@@ -38,5 +41,20 @@ public class ThreadLamda {
     }
 
     @Test
-    public void test
+    public void test(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 300L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(10));
+        for (int i=0;i<18;i++){
+            threadPoolExecutor.submit(() -> {
+                System.out.println(Thread.currentThread().getName() + " is running");
+                try {
+                    int timeout = new Random().nextInt(10);
+                    System.out.println("sleeping "+timeout);
+                    TimeUnit.MILLISECONDS.sleep(timeout);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+    }
 }
