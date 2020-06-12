@@ -1,6 +1,8 @@
 package basic.tech.timer;
 
 import java.util.*;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,18 +22,26 @@ public class Meituan {
     }
 
     public static void main(String[] args) {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5000);
 
         Meituan main = new Meituan();
         main.setFunctionName("main");
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             new Thread(() -> {
                 try {
-                    Random random = new Random();
-                    int i1 = random.nextInt(1000);
-                    TimeUnit.MILLISECONDS.sleep(i1);
+                    cyclicBarrier.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
                 }
+//                try {
+//                    Random random = new Random();
+//                    int i1 = random.nextInt(1000);
+//                    TimeUnit.MILLISECONDS.sleep(i1);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 System.out.println(main.qps2());
 
             }).start();
@@ -77,6 +87,13 @@ public class Meituan {
             return true;
         }
         Integer integer = map.get(seconds).intValue() - 1;
+        try {
+            Random random = new Random();
+            int i1 = random.nextInt(100);
+            TimeUnit.MILLISECONDS.sleep(i1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Integer value = map.put(seconds, integer);
         System.out.println("key:" + seconds + " before:" + value + " after:" + integer);
         if (value < 0) {
