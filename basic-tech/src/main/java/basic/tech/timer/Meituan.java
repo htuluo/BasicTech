@@ -1,9 +1,7 @@
 package basic.tech.timer;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description: QPS
@@ -27,7 +25,15 @@ public class Meituan {
         main.setFunctionName("main");
         for (int i = 0; i < 100; i++) {
             new Thread(() -> {
+                try {
+                    Random random = new Random();
+                    int i1 = random.nextInt(1000);
+                    TimeUnit.MILLISECONDS.sleep(i1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(main.qps2());
+
             }).start();
         }
 //        boolean b = main.qps2();
@@ -72,7 +78,7 @@ public class Meituan {
         }
         Integer integer = map.get(seconds).intValue() - 1;
         Integer value = map.put(seconds, integer);
-        System.out.println("before:" + value + " after:" + integer);
+        System.out.println("key:" + seconds + " before:" + value + " after:" + integer);
         if (value < 0) {
             return false;
         }
