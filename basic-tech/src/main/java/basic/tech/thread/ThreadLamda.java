@@ -1,5 +1,7 @@
 package basic.tech.thread;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.concurrent.TimeUnit;
 
 public class ThreadLamda {
@@ -34,4 +36,7 @@ public class ThreadLamda {
         thread1.start();
 
     }
+
+    @Test
+    public void test
 }
