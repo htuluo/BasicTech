@@ -20,6 +20,8 @@ public class CyclicBarrierDemo {
             int tmp = i;
             new Thread(() -> {
                 System.out.println("第" + tmp + "龙珠收集");
+//                int parties = cyclicBarrier.await();
+//                System.out.println(parties);
                 try {
                     cyclicBarrier.await();
                 } catch (InterruptedException e) {
