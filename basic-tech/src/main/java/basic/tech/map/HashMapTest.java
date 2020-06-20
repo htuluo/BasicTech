@@ -43,7 +43,7 @@ public class HashMapTest {
     static void conCurrentHashMap() throws Exception {
         final int count = 400;
         final AtomicInteger checkNum = new AtomicInteger(0);
-        ExecutorService newFixedThreadPool = new ThreadPoolExecutor(200, 200, 20L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(200));
+        ExecutorService newFixedThreadPool = new ThreadPoolExecutor(200, 200, 20L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(10),new ThreadPoolExecutor.CallerRunsPolicy());
         //
         final Map<Long, String> map = new ConcurrentHashMap<>();
         map.put(0L, "test");
@@ -72,6 +72,7 @@ public class HashMapTest {
             conCurrentHashMap();
             Thread.sleep(500L);
         }
+        System.out.println("===========");
     }
 
 }
