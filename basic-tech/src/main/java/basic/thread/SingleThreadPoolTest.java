@@ -2,9 +2,13 @@ package basic.thread;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -52,6 +56,26 @@ public class SingleThreadPoolTest {
         }
         countDownLatch.await();
         System.out.println("---- end ----");
+    }
+
+
+    /**
+     * singleThreadPool submit
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void test3() throws InterruptedException {
+        CopyOnWriteArrayList<Integer> LIST_CACHE = new CopyOnWriteArrayList<>();
+        LIST_CACHE.add(100);
+        LIST_CACHE.add(14);
+        LIST_CACHE.add(8);
+        LIST_CACHE.add(7);
+        LIST_CACHE.add(500);
+        List list = (ArrayList) LIST_CACHE.parallelStream().filter(item ->
+                Integer.compare((int) item, 10) < 0
+        ).collect(Collectors.toList());
+        System.out.println(list);
     }
 
 
