@@ -28,7 +28,7 @@ public class ConcurrentPrimeClass {
      */
     private static Integer MAX_NUM;
 
-    private ReentrantLock lock = new ReentrantLock();
+    private static ReentrantLock lock = new ReentrantLock();
 
     static {
         LIST_CACHE = new CopyOnWriteArrayList<Integer>();
@@ -100,32 +100,5 @@ public class ConcurrentPrimeClass {
 
         return LIST_CACHE;
     }
-
-    public static void main(String[] args) {
-        CountDownLatch countDownLatch = new CountDownLatch(5);
-        ConcurrentPrimeClass concurrentPrimeClass = new ConcurrentPrimeClass();
-        for (int i = 0; i < 5; i++) {
-            new Thread(() -> {
-                countDownLatch.countDown();
-                try {
-                    TimeUnit.MILLISECONDS.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                List<Integer> primeForNum = concurrentPrimeClass.findPrimeForNum(new Random().nextInt(5000));
-                System.out.println(primeForNum);
-
-            }).start();
-        }
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("=========");
-
-    }
-
 
 }
