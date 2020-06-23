@@ -1,12 +1,10 @@
 package basic.tech.prime;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @description:
+ * @description: 寻找素数
  * @author: luolm
  * @createTime： 2020/6/22
  * @version: v1.0.0
@@ -33,6 +31,25 @@ public class PrimeClass {
     }
 
     /**
+     * 查找某个正整数的所有质数
+     *
+     * @param num
+     * @return
+     */
+    public Set<Integer> findPrimeSetForNum(int num) {
+        Set<Integer> set = new HashSet<>();
+        if (num < 2) {
+            return set;
+        }
+        for (int i = 2; i <= num; i++) {
+            if (isPrime(i)) {
+                set.add(i);
+            }
+        }
+        return set;
+    }
+
+    /**
      * 判断某整数是否为质数
      *
      * @param num
@@ -55,7 +72,7 @@ public class PrimeClass {
     public static void main(String[] args) {
         PrimeClass primeClass = new PrimeClass();
         long start = System.currentTimeMillis();
-        List<Integer> primeList = primeClass.findPrimeForNum(100000000);
+        Set<Integer> primeList = primeClass.findPrimeSetForNum(100000000);
         System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
         start = System.currentTimeMillis();
         int filter = 4000000;
