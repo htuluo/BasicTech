@@ -18,7 +18,7 @@ public class PrimeClass {
      * @return
      */
     public List<Integer> findPrimeForNum(int num) {
-        List<Integer> list = new LinkedList<>();
+        List<Integer> list = new ArrayList<>();
         if (num < 2) {
             return list;
         }
@@ -72,7 +72,8 @@ public class PrimeClass {
     public static void main(String[] args) {
         PrimeClass primeClass = new PrimeClass();
         long start = System.currentTimeMillis();
-        Set<Integer> primeList = primeClass.findPrimeSetForNum(100000000);
+//        Set<Integer> primeList = primeClass.findPrimeSetForNum(100000000);
+        List<Integer> primeList = primeClass.findPrimeForNum(100000000);
         System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
         start = System.currentTimeMillis();
         int filter = 4000000;
