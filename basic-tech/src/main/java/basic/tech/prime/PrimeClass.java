@@ -1,7 +1,9 @@
 package basic.tech.prime;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -52,7 +54,17 @@ public class PrimeClass {
 
     public static void main(String[] args) {
         PrimeClass primeClass = new PrimeClass();
-        System.out.println(primeClass.findPrimeForNum(200));
+        long start = System.currentTimeMillis();
+        List<Integer> primeList = primeClass.findPrimeForNum(100000000);
+        System.out.println("cost:" + (System.currentTimeMillis() - start) / 1000);
+        start = System.currentTimeMillis();
+        int filter = 4000000;
+        System.out.println(primeList.stream().filter(item -> item < filter).collect(Collectors.toList()).size());
+        System.out.println("stream cost:" + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+        System.out.println(primeList.parallelStream().filter(item -> item < filter).collect(Collectors.toList()).size());
+        System.out.println("parallelStream cost:" + (System.currentTimeMillis() - start));
+
     }
 
 
