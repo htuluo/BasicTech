@@ -2,9 +2,6 @@ package basic.tech.prime;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
@@ -41,7 +38,6 @@ public class ConcurrentPrime2Class {
         }
         //先从缓存list中查找
         if (!LIST_CACHE.isEmpty() && LIST_CACHE.size() != 0 && num <= MAX_NUM) {
-            System.out.println("从缓存拿：" + num);
             list = LIST_CACHE.stream().filter(item ->
                     Integer.compare((int) item, num) <= 0
             ).collect(Collectors.toList());
@@ -92,33 +88,5 @@ public class ConcurrentPrime2Class {
         return primeList;
     }
 
-    public static void main(String[] args) {
-        CountDownLatch countDownLatch = new CountDownLatch(5);
-        ConcurrentPrime2Class concurrentPrimeClass = new ConcurrentPrime2Class();
-        for (int i = 0; i < 5; i++) {
-            new Thread(() -> {
-                countDownLatch.countDown();
-                try {
-                    TimeUnit.MILLISECONDS.sleep(new Random().nextInt(500));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                int num = new Random().nextInt(500000);
-                long start = System.currentTimeMillis();
-                List<Integer> primeForNum = concurrentPrimeClass.findPrimeForNum(num);
-                System.out.println(Thread.currentThread().getName() + " cost:" + (System.currentTimeMillis() - start));
-//                System.out.println(num + "的数字：" + primeForNum);
-
-            }).start();
-        }
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("=========");
-
-    }
 
 }

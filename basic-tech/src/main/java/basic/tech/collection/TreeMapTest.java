@@ -15,6 +15,7 @@ public class TreeMapTest {
         TreeMap map=new TreeMap();
         map.put("aa","bb");
         map.put("c","aa");
+        map.put("ab","aa");
         map.put("b","tt");
         map.put("m","tt");
         map.put("q","bt");
