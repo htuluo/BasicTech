@@ -52,6 +52,9 @@ public class ReverseLink {
             }
             third = second.next;
             second.next = pre;
+            if (third.next == null) {
+                head = third;
+            }
             pre = third.next;
             third.next = second;
         }
@@ -76,10 +79,13 @@ public class ReverseLink {
 
     public static void main(String[] args) {
         ReverseLink reverseLink = new ReverseLink();
-        reverseLink.add("aa");
+        reverseLink.add("a");
         reverseLink.add("b");
         reverseLink.add("c");
         reverseLink.add("d");
+        reverseLink.add("e");
+        reverseLink.add("f");
+        System.out.println(reverseLink.toString());
         reverseLink.reverse();
         System.out.println(reverseLink.toString());
     }
