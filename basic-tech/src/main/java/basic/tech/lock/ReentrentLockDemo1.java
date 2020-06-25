@@ -16,21 +16,27 @@ public class ReentrentLockDemo1 {
 
     public void method1() {
         lock.lock();
-        System.out.println(Thread.currentThread().getName() + "\tinvoked the method1");
-        method2();
-        lock.unlock();
+        try {
+            System.out.println(Thread.currentThread().getName() + "\tinvoked the method1");
+            method2();
+        } finally {
+            lock.unlock();
+
+        }
     }
 
     public void method2() {
         lock.lock();
         try {
+            System.out.println(Thread.currentThread().getName() + "\tinvoked the method2====");
             Thread.sleep(new Random().nextInt(50));
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            lock.unlock();
+
         }
-        System.out.println(Thread.currentThread().getName() + "\tinvoked the method2====");
 //        method1();
-        lock.unlock();
     }
 
     public static void main(String[] args) {
