@@ -28,6 +28,37 @@ public class ReverseLink {
 
     }
 
+    /**
+     * 翻转链表
+     */
+    public void reverse() {
+        if (head == null) {
+            return;
+        }
+        Node pre, second, third = null;
+        pre = head;
+        while (pre != null) {
+            if (pre.next == null) {
+                pre.next = third;
+                head = pre;
+                return;
+            }
+            second = pre.next;
+            pre.next = third;
+            if (second.next == null) {
+                head = second;
+                second.next = pre;
+                return;
+            }
+            third = second.next;
+            second.next = pre;
+            pre = third.next;
+            third.next = second;
+        }
+
+
+    }
+
     @Override
     public String toString() {
         List<String> list = new ArrayList<>();
@@ -49,7 +80,8 @@ public class ReverseLink {
         reverseLink.add("b");
         reverseLink.add("c");
         reverseLink.add("d");
-        System.out.println(reverseLink);
+        reverseLink.reverse();
+        System.out.println(reverseLink.toString());
     }
 
     class Node {
