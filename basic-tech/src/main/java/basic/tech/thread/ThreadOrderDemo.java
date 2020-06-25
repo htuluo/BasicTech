@@ -76,6 +76,38 @@ public class ThreadOrderDemo {
         }
     }
 
+    class MyThread3 extends Thread {
+        private Semaphore semaphore = null;
+
+        public void setSemaphore(Semaphore semaphore) {
+            this.semaphore = semaphore;
+        }
+
+        public MyThread3() {
+        }
+
+        @Override
+        public void run() {
+            try {
+                int i = 0;
+                while (true) {
+                    i++;
+                    semaphore.acquire();
+//                    if (i % 2 == 1) {
+                    System.out.println(Thread.currentThread().getName() + " is running ,i==" + i);
+
+//                    }
+                    TimeUnit.MILLISECONDS.sleep(new Random().nextInt(1000));
+                    semaphore.release();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                semaphore.release();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Semaphore semaphore = new Semaphore(1, true);
         ThreadOrderDemo threadOrderDemo = new ThreadOrderDemo();
@@ -85,8 +117,12 @@ public class ThreadOrderDemo {
         MyThread2 myThread2 = threadOrderDemo.new MyThread2();
         myThread2.setSemaphore(semaphore);
         myThread2.setName("my-2");
+        MyThread3 myThread3 = threadOrderDemo.new MyThread3();
+        myThread3.setSemaphore(semaphore);
+        myThread3.setName("my-3");
         myThread.start();
         myThread2.start();
+        myThread3.start();
 
     }
 }
