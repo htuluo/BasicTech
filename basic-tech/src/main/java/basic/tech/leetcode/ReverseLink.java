@@ -79,6 +79,7 @@ public class ReverseLink {
 
     public static void main(String[] args) {
         ReverseLink reverseLink = new ReverseLink();
+        ReverseLink.Node node = reverseLink.new Node();//内部类的创建
         reverseLink.add("a");
         reverseLink.add("b");
         reverseLink.add("c");
