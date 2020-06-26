@@ -1,8 +1,6 @@
 package basic.tech.leetcode;
 
-import javax.swing.tree.TreeNode;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * @description:
@@ -75,11 +73,19 @@ public class TreeNodeDemo {
      * @param node
      * @param list
      */
-    public void preOrderSearch(TreeNode node, List<Integer> list) {
+    public void deepOrderSearch(TreeNode node, List<Integer> list, int order) {
         if (node != null) {
-            list.add(node.value);
-            preOrderSearch(node.left, list);
-            preOrderSearch(node.right, list);
+            if (order == 0) {
+                list.add(node.value);
+            }
+            deepOrderSearch(node.left, list, order);
+            if (order == 1) {
+                list.add(node.value);
+            }
+            deepOrderSearch(node.right, list, order);
+            if (order == 2) {
+                list.add(node.value);
+            }
         }
     }
 
@@ -155,11 +161,24 @@ public class TreeNodeDemo {
         treeNodeDemo.addNode(10);
         treeNodeDemo.addNode(7);
         treeNodeDemo.addNode(8);
-        treeNodeDemo.addNode(6);
-        treeNodeDemo.addNode(15);
-        treeNodeDemo.addNode(3);
         treeNodeDemo.addNode(16);
+        treeNodeDemo.addNode(5);
+        treeNodeDemo.addNode(13);
+        treeNodeDemo.addNode(2);
         treeNodeDemo.addNode(14);
+        List<Integer> list = new LinkedList<>();
+        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 0);
+        System.out.println("前序遍历：" + list);
+        list.clear();
+        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 1);
+        System.out.println("中序遍历：" + list);
+        list.clear();
+        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 2);
+        System.out.println("后序遍历：" + list);
+        list.clear();
+        treeNodeDemo.breadFirstOrderSearch(treeNodeDemo.root, list);
+        System.out.println("广度优先遍历：" + list);
+        list.clear();
         System.out.println(treeNodeDemo.toString());
 
 
