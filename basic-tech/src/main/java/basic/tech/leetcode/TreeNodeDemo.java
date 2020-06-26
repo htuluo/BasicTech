@@ -1,8 +1,7 @@
 package basic.tech.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import javax.swing.tree.TreeNode;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -65,8 +64,8 @@ public class TreeNodeDemo {
         }
         TreeNode pointer = root;
 //        preOrderSearch(pointer, list);
-        list.add(pointer.value);
-        breadFirstOrderSearch(pointer, list);
+//        breadFirstOrderSearch(pointer, list);
+        breadFirstOrderSearchFindRight(pointer, list);
         return list.toString();
     }
 
@@ -87,22 +86,67 @@ public class TreeNodeDemo {
     /**
      * 广度优先遍历
      *
-     * @param node
+     * @param root
      * @param list
      */
-    public void breadFirstOrderSearch(TreeNode node, List<Integer> list) {
-        Queue<TreeNode> treeNodes = new ArrayBlockingQueue<TreeNode>(12);
-        treeNodes.add(node);
-        if (node != null) {
-            if (node.left != null) {
-                list.add(node.left.value);
+    public void breadFirstOrderSearch(TreeNode root, List<Integer> list) {
+        Queue<TreeNode> treeNodeQueue = new LinkedList<>();
+        treeNodeQueue.add(root);
+        while (treeNodeQueue.peek() != null) {
+            TreeNode poll = treeNodeQueue.poll();
+            list.add(poll.value);
+            if (poll.left != null) {
+                treeNodeQueue.add(poll.left);
             }
-            if (node.right != null) {
-                list.add(node.right.value);
+            if (poll.right != null) {
+                treeNodeQueue.add(poll.right);
             }
-            breadFirstOrderSearch(node.left, list);
-            breadFirstOrderSearch(node.right, list);
         }
+    }
+
+    /**
+     * 广度优先遍历,打印最右侧元素
+     *
+     * @param root
+     * @param list
+     */
+    public void breadFirstOrderSearchFindRight(TreeNode root, List<Integer> list) {
+        Queue<NodeLevel> treeNodeQueue = new LinkedList<>();
+        NodeLevel nodeLevel = new NodeLevel(root, 1);
+        treeNodeQueue.add(nodeLevel);
+//        list.add(root.value);
+        int i = 1;
+        List<NodeLevel> nodeFilter = new LinkedList<>();
+        while (treeNodeQueue.peek() != null) {
+            NodeLevel poll = treeNodeQueue.poll();
+            if (nodeFilter.size() > 0 && nodeFilter.get(nodeFilter.size() - 1).level.equals(poll.level)) {
+                nodeFilter.remove(nodeFilter.size() - 1);
+            }
+            nodeFilter.add(poll);
+            if (poll.node.left != null) {
+                treeNodeQueue.add(new NodeLevel(poll.node.left, poll.level + 1));
+            }
+            if (poll.node.right != null) {
+                treeNodeQueue.add(new NodeLevel(poll.node.right, poll.level + 1));
+            }
+        }
+
+        while (nodeFilter.size() > 0) {
+            list.add(nodeFilter.remove(0).node.value);
+        }
+
+
+    }
+
+    class NodeLevel {
+        private TreeNode node;
+        private Integer level;
+
+        public NodeLevel(TreeNode node, Integer level) {
+            this.node = node;
+            this.level = level;
+        }
+
     }
 
 
