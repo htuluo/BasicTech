@@ -28,9 +28,38 @@ public class MapOneKeyTest {
     }
 
     public static void main(String[] args) {
-        test2();
+        test3();
     }
 
+    /**
+     * map 和concurrentHashMap对比
+     */
+    public static void test3() {
+        Map<Integer, Integer> hashMap = new ConcurrentHashMap<>();
+        Map<Integer, Integer> map3 = new HashMap<>();
+        CountDownLatch countDownLatch = new CountDownLatch(count);
+        for (int i = 0; i < count; i++) {
+            final int flag = i;
+            new Thread(() -> {
+                hashMap.put(flag, flag);
+                map3.put(flag, flag);
+//                for (int i1 = flag; i1 < flag + 100; i1++) {
+//                }
+
+                countDownLatch.countDown();
+
+            }).start();
+
+        }
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(hashMap.size());
+        System.out.println(map3.size());
+    }
 
     /**
      * 需要对公用对象加锁才能保证线程安全
