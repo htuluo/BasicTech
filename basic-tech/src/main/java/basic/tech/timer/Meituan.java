@@ -16,18 +16,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Meituan {
 
     private static Map<String, AtomicInteger> map = new HashMap<>();
+    private static Map<String, Integer> map2 = new HashMap<>();
+    private static int initialValue = 1000;
 
     static {
         long time = System.currentTimeMillis() / 1000;
-        map.put(String.valueOf(time), new AtomicInteger(20));
+        map.put(String.valueOf(time), new AtomicInteger(initialValue));
+        map2.put(String.valueOf(time), initialValue);
     }
 
     public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(10000);
+        int count_thread = 10000;
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(count_thread);
 
         Meituan main = new Meituan();
         main.setFunctionName("main");
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < count_thread; i++) {
             new Thread(() -> {
                 try {
                     cyclicBarrier.await();
@@ -43,7 +47,7 @@ public class Meituan {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                System.out.println(main.qps2());
+                System.out.println(main.qps3());
 
             }).start();
         }
@@ -84,7 +88,7 @@ public class Meituan {
     public boolean qps2() {
         String seconds = String.valueOf(System.currentTimeMillis() / 1000);
         if (!map.containsKey(seconds)) {
-            map.put(seconds, new AtomicInteger(20));
+            map.put(seconds, new AtomicInteger(initialValue));
             return true;
         }
 //        synchronized (map) {
@@ -97,12 +101,38 @@ public class Meituan {
 //            } catch (InterruptedException e) {
 //                e.printStackTrace();
 //            }
-            AtomicInteger value = map.put(seconds, atomicInteger);
-            System.out.println("key:" + seconds + " before:" + value.get() + " after:" + integer);
-            if (value.get() < 0) {
-                return false;
-            }
+        AtomicInteger value = map.put(seconds, atomicInteger);
+        System.out.println("key:" + seconds + " before:" + value.get() + " after:" + integer);
+        if (value.get() < 0) {
+            return false;
+        }
+        return true;
+//        }
+
+    }
+
+    public boolean qps3() {
+        String seconds = String.valueOf(System.currentTimeMillis() / 1000);
+        if (!map2.containsKey(seconds)) {
+            map2.put(seconds, initialValue);
             return true;
+        }
+//        synchronized (map) {
+        Integer atomicInteger = map2.get(seconds);
+
+//            try {
+//                Random random = new Random();
+//                int i1 = random.nextInt(100);
+//                TimeUnit.MILLISECONDS.sleep(i1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        Integer value = map2.put(seconds, --atomicInteger);
+        System.out.println("key:" + seconds + " before:" + value + " after:" + atomicInteger);
+        if (value < 0) {
+            return false;
+        }
+        return true;
 //        }
 
     }
