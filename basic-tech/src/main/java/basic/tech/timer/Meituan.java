@@ -111,6 +111,10 @@ public class Meituan {
 
     }
 
+    /**
+     * 不使用原子integer
+     * @return
+     */
     public boolean qps3() {
         String seconds = String.valueOf(System.currentTimeMillis() / 1000);
         if (!map2.containsKey(seconds)) {
@@ -136,4 +140,5 @@ public class Meituan {
 //        }
 
     }
+
 }
