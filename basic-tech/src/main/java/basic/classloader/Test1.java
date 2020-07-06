@@ -1,5 +1,7 @@
 package basic.classloader;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @description:
  * @author: luolm
@@ -27,5 +29,6 @@ public class Test1 {
         //-------常量变量不能实例化对象
         System.out.println(SimpleDemo.b);
 
+        ConcurrentHashMap<Object, Object> objectObjectConcurrentHashMap = new ConcurrentHashMap<>();
     }
 }

@@ -41,6 +41,19 @@ public class MyClass<T> implements Cloneable,Serializable {
         return "MyClass: id="+this.id+", name="+this.name+", pubField="+this.pubField;
     }
 
+    public static void main(String[] args) {
+        MyClass<String> stringMyClass = new MyClass<>();
+        stringMyClass.setName("aaa");
+        MyClass clone = (MyClass<String>)stringMyClass.clone();
+        System.out.println(clone==stringMyClass);
+        System.out.println(clone.name);
+        stringMyClass.setName("bb");
+        System.out.println("stringMyClass ");
+        System.out.println(clone.name);
+
+
+    }
+
 }
 
 
