@@ -7,6 +7,8 @@ public class ParentClass {
     private Integer parentInteger=1;
     private Integer sameInteger = 5;
     private static String parentStr="parent";
+    protected String parentProtectStr="";
+    String parentDefaultStr="";
 
     static {
         System.out.println("Parent static init");
