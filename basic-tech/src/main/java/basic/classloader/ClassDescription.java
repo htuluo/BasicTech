@@ -14,9 +14,21 @@ import java.lang.reflect.TypeVariable;
  */
 public class ClassDescription {
     public static void main(String[] args) {
-        String classDescription = getClassDescription(MyClass.class);
-        System.out.println(classDescription);
+        MyClass<String> stringMyClass = new MyClass<>();
+        Class<? extends MyClass> clazz = stringMyClass.getClass();
+        System.out.println(clazz.getFields());
+        System.out.println(clazz.getDeclaredFields());
+//        String classDescription = getClassDescription(MyClass.class);
+//        System.out.println(classDescription);
     }
+
+
+
+    /**
+     *  获取类描述信息
+     * @param c
+     * @return
+     */
     public static String getClassDescription(Class c) {
         StringBuilder stringBuilder = new StringBuilder();
         int modifierBits = 0;
