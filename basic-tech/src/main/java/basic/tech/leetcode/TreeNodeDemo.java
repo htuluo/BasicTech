@@ -68,7 +68,7 @@ public class TreeNodeDemo {
     }
 
     /**
-     * 前序遍历
+     * 前序，中序，后序遍历
      *
      * @param node
      * @param list
