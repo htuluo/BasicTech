@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.luo</groupId>
-    <artifactId>basic-tech</artifactId>
+    <artifactId>java-basic</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>java-basic</name>
     <!-- FIXME change it to the project's website -->
@@ -70,6 +70,11 @@
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
             <version>5.0.0-RC4</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.40</version>
         </dependency>
 
 
