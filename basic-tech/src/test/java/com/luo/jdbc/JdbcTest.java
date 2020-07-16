@@ -2,6 +2,8 @@ package com.luo.jdbc;
 
 import org.junit.Test;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
@@ -79,6 +81,24 @@ public class JdbcTest {
 //        Driver driver = (Driver) clazz.newInstance();
 //        DriverManager.registerDriver(driver);
         Connection connect = DriverManager.getConnection(url, info);
+        System.out.println(connect);
+
+    }
+
+    /**
+     * jdbc实现方式5,配置文件加载
+     */
+    @Test
+    public void testJdbc5() throws Exception {
+        InputStream io = JdbcTest.class.getClassLoader().getResourceAsStream("jdbc.properties");
+        Properties properties = new Properties();
+        properties.load(io);
+
+        //加载类供Manager使用
+        Class.forName(  properties.getProperty("jdbc.driverClass"));
+//        Driver driver = (Driver) clazz.newInstance();
+//        DriverManager.registerDriver(driver);
+        Connection connect = DriverManager.getConnection(properties.getProperty("jdbc.url"), properties.getProperty("jdbc.user"),properties.getProperty("jdbc.password"));
         System.out.println(connect);
 
     }
