@@ -54,10 +54,13 @@ public class JdbcTest {
      */
     @Test
     public void testJdbc3() throws Exception {
+        Class<?> clazz = Class.forName("com.mysql.jdbc.Driver");
+        Driver driver = (Driver) clazz.newInstance();
         String url = "jdbc:mysql://localhost:3306/test";
         Properties info = new Properties();
         info.setProperty("user", "root");
         info.setProperty("password", "root");
+        DriverManager.registerDriver(driver);
         Connection connect = DriverManager.getConnection(url, info);
         System.out.println(connect);
 
