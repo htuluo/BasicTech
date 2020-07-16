@@ -43,7 +43,16 @@ public class MergeLink {
      * @return
      */
     public static Node mergeLink(List<Node> nodeList) {
+        //三种比较形式
+       /* Queue<Node> queue = new PriorityQueue<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return o1.value-o2.value;
+            }
+        });*/
+        //Queue<Node> queue = new PriorityQueue<>((o1, o2) -> o1.value-o2.value);
         Queue<Node> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.value));
+
         Node mergeHead = null;
 
         for (Node head : nodeList) {
