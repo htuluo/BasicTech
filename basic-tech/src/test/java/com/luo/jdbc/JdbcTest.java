@@ -65,4 +65,21 @@ public class JdbcTest {
         System.out.println(connect);
 
     }
+    /**
+     * jdbc实现方式4,默认加载模式
+     */
+    @Test
+    public void testJdbc4() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/test";
+        Properties info = new Properties();
+        info.setProperty("user", "root");
+        info.setProperty("password", "root");
+        //加载类供Manager使用
+        Class.forName("com.mysql.jdbc.Driver");
+//        Driver driver = (Driver) clazz.newInstance();
+//        DriverManager.registerDriver(driver);
+        Connection connect = DriverManager.getConnection(url, info);
+        System.out.println(connect);
+
+    }
 }
