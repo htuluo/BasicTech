@@ -1,6 +1,8 @@
 package com.luo.jdbc;
 
 import basic.jdbc.JdbcUtils;
+import basic.jdbc.UserEntity;
+import basic.jdbc.UserQuery;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -133,5 +135,13 @@ public class JdbcTest {
         String sql = "update user set pwd=? where user=?";
         int update = JdbcUtils.update(sql, "bbb", "zhangsan");
         System.out.println("update result---" + update);
+    }
+
+    @Test
+    public void testSelectUser() throws Exception {
+        String sql = "select id,user,pwd from user where user=?";
+        UserQuery userQuery = new UserQuery();
+        UserEntity userEntity = userQuery.selectQuery(sql, "zhangsan");
+        System.out.println("select result---" + userEntity);
     }
 }

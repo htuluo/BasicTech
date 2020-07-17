@@ -4,10 +4,7 @@ import org.apache.tools.ant.taskdefs.Classloader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 /**
@@ -57,6 +54,22 @@ public class JdbcUtils {
         } catch (Exception e) {
 
         }
+    }
+    /**
+     * 关闭连接
+     *
+     * @param connection
+     * @param statement
+     */
+    public static void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+     closeConnection(connection,statement);
     }
 
     /**
