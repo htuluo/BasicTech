@@ -139,7 +139,7 @@ public class JdbcTest {
 
     @Test
     public void testSelectUser() throws Exception {
-        String sql = "select id,user,pwd from user where user=?";
+        String sql = "select id,user,pwd,create_date as createDate from user where user=?";
         UserQuery userQuery = new UserQuery();
         UserEntity userEntity = userQuery.selectQuery(sql, "zhangsan");
         System.out.println("select result---" + userEntity);

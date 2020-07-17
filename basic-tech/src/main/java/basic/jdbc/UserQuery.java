@@ -38,7 +38,8 @@ public class UserQuery {
                 UserEntity userEntity = new UserEntity();
                 for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
                     Object columnValue = resultSet.getObject(i + 1);
-                    String columnName = resultSetMetaData.getColumnName(i+1);
+                    String columnName = resultSetMetaData.getColumnLabel(i + 1);
+//                    String columnName = resultSetMetaData.getColumnName(i+1);
                     Field declaredField = UserEntity.class.getDeclaredField(columnName);
                     declaredField.setAccessible(true);
                     declaredField.set(userEntity, columnValue);
