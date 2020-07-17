@@ -4,6 +4,7 @@ import org.apache.tools.ant.taskdefs.Classloader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.Properties;
 
@@ -55,6 +56,7 @@ public class JdbcUtils {
 
         }
     }
+
     /**
      * 关闭连接
      *
@@ -69,11 +71,12 @@ public class JdbcUtils {
                 throwables.printStackTrace();
             }
         }
-     closeConnection(connection,statement);
+        closeConnection(connection, statement);
     }
 
     /**
      * 更新
+     *
      * @param sql
      * @param objects
      * @return
@@ -94,5 +97,47 @@ public class JdbcUtils {
         } finally {
             closeConnection(connection, statement);
         }
+    }
+
+    /**
+     * 泛型返回查询结果集
+     *
+     * @param clazz
+     * @param sql
+     * @param objects
+     * @param <T>
+     * @return
+     */
+    public static <T> T selectQuery(Class<T> clazz, String sql, Object... objects) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = JdbcUtils.getConnection();
+            statement = connection.prepareStatement(sql);
+            for (int i = 0; i < objects.length; i++) {
+                statement.setObject(i + 1, objects[i]);
+            }
+            resultSet = statement.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            if (resultSet.next()) {
+                T instance = clazz.newInstance();
+                for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
+                    Object columnValue = resultSet.getObject(i + 1);
+                    String columnName = resultSetMetaData.getColumnLabel(i + 1);
+//                    String columnName = resultSetMetaData.getColumnName(i+1);
+                    Field declaredField = UserEntity.class.getDeclaredField(columnName);
+                    declaredField.setAccessible(true);
+                    declaredField.set(instance, columnValue);
+                }
+                return instance;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            JdbcUtils.closeConnection(connection, statement, resultSet);
+        }
+        return null;
     }
 }

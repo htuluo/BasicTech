@@ -144,4 +144,11 @@ public class JdbcTest {
         UserEntity userEntity = userQuery.selectQuery(sql, "zhangsan");
         System.out.println("select result---" + userEntity);
     }
+
+    @Test
+    public void testSelectUser1() throws Exception {
+        String sql = "select id,user,pwd,create_date as createDate from user where user=?";
+        UserEntity userEntity = JdbcUtils.selectQuery(UserEntity.class, sql, "zhangsan");
+        System.out.println("select result---" + userEntity);
+    }
 }
