@@ -1,5 +1,6 @@
 package com.luo.jdbc;
 
+import basic.jdbc.JdbcUtils;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -101,5 +102,11 @@ public class JdbcTest {
         Connection connect = DriverManager.getConnection(properties.getProperty("jdbc.url"), properties.getProperty("jdbc.user"),properties.getProperty("jdbc.password"));
         System.out.println(connect);
 
+    }
+
+    @Test
+    public void testInsert() throws Exception {
+        Connection connection = JdbcUtils.getConnection();
+        System.out.println(connection);
     }
 }
