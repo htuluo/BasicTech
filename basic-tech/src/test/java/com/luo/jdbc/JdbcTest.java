@@ -3,11 +3,15 @@ package com.luo.jdbc;
 import basic.jdbc.JdbcUtils;
 import basic.jdbc.UserEntity;
 import basic.jdbc.UserQuery;
+import com.google.common.base.Stopwatch;
 import org.junit.Test;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.time.temporal.TemporalUnit;
+import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description:
@@ -150,5 +154,29 @@ public class JdbcTest {
         String sql = "select id,user,pwd,create_date as createDate from user where user=?";
         UserEntity userEntity = JdbcUtils.selectQuery(UserEntity.class, sql, "zhangsan");
         System.out.println("select result---" + userEntity);
+    }
+
+    @Test
+    public void testBatchInsert1() throws Exception {
+        String sql = "insert user(user,pwd)values(?,?)";
+        long l = System.currentTimeMillis();
+        Stopwatch started = Stopwatch.createStarted();
+        Connection connection = JdbcUtils.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        connection.setAutoCommit(false);
+        for (int i = 0; i < 10000; i++) {
+            statement.setObject(1, "user" + i);
+            statement.setObject(2, "pwd" + i);
+            statement.addBatch();
+            if (i%500==0){
+                statement.executeBatch();
+                statement.clearBatch();
+            }
+        }
+        int[] ints = statement.executeBatch();
+        connection.commit();
+        JdbcUtils.closeConnection(connection, statement);
+
+        System.out.println("batch result---cost:" + started.elapsed());
     }
 }
