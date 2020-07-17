@@ -8,6 +8,17 @@ import java.util.Date;
  * @createTime： 2020/7/17
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
+ *
+ *
+ *
+ *
+ * CREATE TABLE `user` (
+ *   `id` int(11) NOT NULL AUTO_INCREMENT,
+ *   `user` varchar(20) DEFAULT NULL,
+ *   `pwd` varchar(50) DEFAULT NULL,
+ *   `create_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ *   PRIMARY KEY (`id`)
+ * ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
  */
 public class UserEntity {
     private Integer id;

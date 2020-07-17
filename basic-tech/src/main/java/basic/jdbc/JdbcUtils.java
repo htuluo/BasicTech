@@ -126,7 +126,7 @@ public class JdbcUtils {
                     Object columnValue = resultSet.getObject(i + 1);
                     String columnName = resultSetMetaData.getColumnLabel(i + 1);
 //                    String columnName = resultSetMetaData.getColumnName(i+1);
-                    Field declaredField = UserEntity.class.getDeclaredField(columnName);
+                    Field declaredField = clazz.getDeclaredField(columnName);
                     declaredField.setAccessible(true);
                     declaredField.set(instance, columnValue);
                 }
