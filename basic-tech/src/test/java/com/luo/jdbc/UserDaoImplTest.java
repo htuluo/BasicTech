@@ -5,7 +5,6 @@ import basic.jdbc.UserDao;
 import basic.jdbc.UserDaoImpl;
 import basic.jdbc.UserEntity;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.Connection;
