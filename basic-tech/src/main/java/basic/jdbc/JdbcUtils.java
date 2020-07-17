@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -37,6 +38,7 @@ public class JdbcUtils {
 
     /**
      * 关闭连接
+     *
      * @param connection
      * @param statement
      */
@@ -54,6 +56,30 @@ public class JdbcUtils {
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    /**
+     * 更新
+     * @param sql
+     * @param objects
+     * @return
+     */
+    public static int update(String sql, Object... objects) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = getConnection();
+            statement = connection.prepareStatement(sql);
+            for (int i = 0; i < objects.length; i++) {
+                statement.setObject(i + 1, objects[i]);
+            }
+            return statement.executeUpdate();
+
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            closeConnection(connection, statement);
         }
     }
 }

@@ -4,7 +4,6 @@ import basic.jdbc.JdbcUtils;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
@@ -68,6 +67,7 @@ public class JdbcTest {
         System.out.println(connect);
 
     }
+
     /**
      * jdbc实现方式4,默认加载模式
      */
@@ -96,10 +96,10 @@ public class JdbcTest {
         properties.load(io);
 
         //加载类供Manager使用
-        Class.forName(  properties.getProperty("jdbc.driverClass"));
+        Class.forName(properties.getProperty("jdbc.driverClass"));
 //        Driver driver = (Driver) clazz.newInstance();
 //        DriverManager.registerDriver(driver);
-        Connection connect = DriverManager.getConnection(properties.getProperty("jdbc.url"), properties.getProperty("jdbc.user"),properties.getProperty("jdbc.password"));
+        Connection connect = DriverManager.getConnection(properties.getProperty("jdbc.url"), properties.getProperty("jdbc.user"), properties.getProperty("jdbc.password"));
         System.out.println(connect);
 
     }
@@ -107,6 +107,31 @@ public class JdbcTest {
     @Test
     public void testInsert() throws Exception {
         Connection connection = JdbcUtils.getConnection();
+        String sql = "insert user(user,pwd)values(?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, "zhangsan");
+        preparedStatement.setString(2, "11111");
+        preparedStatement.execute();
+        JdbcUtils.closeConnection(connection, preparedStatement);
         System.out.println(connection);
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        Connection connection = JdbcUtils.getConnection();
+        String sql = "update user set pwd=? where user=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, "aaa");
+        preparedStatement.setString(2, "zhangsan");
+        preparedStatement.execute();
+        JdbcUtils.closeConnection(connection, preparedStatement);
+        System.out.println(connection);
+    }
+
+    @Test
+    public void testUpdate2() throws Exception {
+        String sql = "update user set pwd=? where user=?";
+        int update = JdbcUtils.update(sql, "bbb", "zhangsan");
+        System.out.println("update result---" + update);
     }
 }
