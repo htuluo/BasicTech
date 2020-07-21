@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Test1 {
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         //五中类主动加载 的形式
-        //1,new 对象
+        //1,new 对象F
 //        SimpleDemo simpleDemo = new SimpleDemo();
         //2. 静态变量
 //        System.out.println(SimpleDemo.a);
