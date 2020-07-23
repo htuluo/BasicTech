@@ -80,9 +80,9 @@ public class HashMapTest {
         map.put("a",9);
         map.put("b",4);
         map.put("c",6);
-        map.put("c",100);
-        map.put("c",80);
-        map.put("c",12);
+        map.put("p",100);
+        map.put("q",80);
+        map.put("t",12);
         int max=0;
         Optional<Map.Entry<String, Integer>> first = map.entrySet().parallelStream().sorted((o1, o2) -> o2.getValue() - o1.getValue()).findFirst();
         System.out.println(first.get().getKey());
