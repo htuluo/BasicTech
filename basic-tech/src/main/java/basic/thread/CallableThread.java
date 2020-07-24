@@ -17,17 +17,17 @@ public class CallableThread {
         System.out.println("----程序开始运行----");
         Date date1 = new Date();
 
-        int taskSize = 15;
+        int taskSize = 40;
         // 创建一个线程池
 //		ExecutorService pool = Executors.newFixedThreadPool(taskSize);
 
         //下面类在com.google.guava包里
         ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("call-thread-%d").build();
-        ExecutorService pool = new ThreadPoolExecutor(2, 5, 1L,
-                TimeUnit.MILLISECONDS,
+        ExecutorService pool = new ThreadPoolExecutor(2, 5, 7L,
+                TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(13),
                 threadFactory,
-                new ThreadPoolExecutor.AbortPolicy());
+                new ThreadPoolExecutor.CallerRunsPolicy());
         // 创建多个有返回值的任务
         List<Future> list = new ArrayList<Future>();
         for (int i = 0; i < taskSize; i++) {
