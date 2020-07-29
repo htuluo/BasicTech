@@ -7,3 +7,12 @@ spring:
         auto: update
 server:
   connection-timeout: 2000
+
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      enabled: true
+
