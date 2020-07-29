@@ -42,7 +42,7 @@ public class SpringBootJpaApplicationTests
             User user = new User(name, age, "address", sex);
             users.add(user);
         }
-        userRepository.save(users);
+//        userRepository.save(users);
     }
     /**
      * Rigorous Test :-)
