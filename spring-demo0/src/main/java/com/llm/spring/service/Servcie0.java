@@ -1,5 +1,6 @@
 package com.llm.spring.service;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +13,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(3)
-public class Servcie0 {
+public class Servcie0 implements DisposableBean {
     public Servcie0() {
         System.out.println("Servcie0 is inited");
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("Servcie0 is destroyed");
     }
 }

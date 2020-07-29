@@ -19,6 +19,7 @@ public class AppTest {
         AnnotationConfigApplicationContext context=new AnnotationConfigApplicationContext(AppConfig.class);
         context.getBean(X.class);
         User user = context.getBean(User.class);
+        context.registerShutdownHook();
         System.out.println("OK");
 //        user.
 //        AutowireCapableBeanFactory autowireCapableBeanFactory = context.getAutowireCapableBeanFactory();
