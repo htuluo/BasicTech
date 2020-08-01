@@ -22,7 +22,7 @@ public class SubTree {
         boolean flag = false;
         if(root1 != null && root2 != null){
             if(root1.equals( root2)){
-                flag = isSub(root1, root2);
+                flag = isSubEquals(root1, root2);
             }else{
                 flag = isSubTree(root1.getLeft(), root2);
                 if(!flag){
@@ -32,7 +32,7 @@ public class SubTree {
         }
         return flag;
     }
-    private static boolean isSub(Tree.TreeNode root1, Tree.TreeNode root2){
+    private static boolean isSubEquals(Tree.TreeNode root1, Tree.TreeNode root2){
         if(root2 == null){
             return true;
         }
@@ -43,7 +43,7 @@ public class SubTree {
             return false;
         }
 
-        return isSub(root1.getLeft(), root2.getLeft()) && isSub(root1.getRight(), root2.getRight());
+        return isSubEquals(root1.getLeft(), root2.getLeft()) && isSubEquals(root1.getRight(), root2.getRight());
     }
 
 
