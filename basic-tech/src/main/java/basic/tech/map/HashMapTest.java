@@ -17,7 +17,7 @@ public class HashMapTest {
         final AtomicInteger checkNum = new AtomicInteger(0);
         ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(100);
         //
-        final Map<Long, String> map = new HashMap<Long, String>();
+        final Map<Long, String> map = new HashMap<Long, String>(100);
         map.put(0L, "test");
         //map.put(1L, "www.imxylz.cn");
         for (int j = 0; j < count; j++) {
@@ -72,7 +72,7 @@ public class HashMapTest {
 //        }
 //        System.out.println("===========");
 
-        mapSort();
+        doit();
     }
 
     public static void mapSort() {

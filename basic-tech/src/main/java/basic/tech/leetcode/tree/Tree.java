@@ -1,4 +1,4 @@
-package basic.tech.leetcode;
+package basic.tech.leetcode.tree;
 
 import java.util.*;
 
@@ -9,8 +9,8 @@ import java.util.*;
  * @version: v1.0.0
  * @history: (版本) 作者 时间 注释
  */
-public class TreeNodeDemo {
-    private TreeNode root;
+public class Tree {
+    public TreeNode root;
 
     class TreeNode {
         private TreeNode left;
@@ -19,6 +19,43 @@ public class TreeNodeDemo {
 
         public TreeNode(Integer value) {
             this.value = value;
+            left = null;
+            right = null;
+        }
+
+        public TreeNode getLeft() {
+            return left;
+        }
+
+        public void setLeft(TreeNode left) {
+            this.left = left;
+        }
+
+        public TreeNode getRight() {
+            return right;
+        }
+
+        public void setRight(TreeNode right) {
+            this.right = right;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public void setValue(Integer value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object node) {
+            if (node instanceof TreeNode) {
+                TreeNode tmp = (TreeNode) node;
+                if (tmp.value.equals(this.value)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
 
@@ -73,7 +110,7 @@ public class TreeNodeDemo {
      * @param node
      * @param list
      */
-    public void deepOrderSearch(TreeNode node, List<Integer> list, int order) {
+    public static void deepOrderSearch(TreeNode node, List<Integer> list, int order) {
         if (node != null) {
             if (order == 0) {
                 list.add(node.value);
@@ -144,6 +181,7 @@ public class TreeNodeDemo {
 
     }
 
+
     class NodeLevel {
         private TreeNode node;
         private Integer level;
@@ -157,31 +195,39 @@ public class TreeNodeDemo {
 
 
     public static void main(String[] args) {
-        TreeNodeDemo treeNodeDemo = new TreeNodeDemo();
-        treeNodeDemo.addNode(10);
-        treeNodeDemo.addNode(7);
-        treeNodeDemo.addNode(8);
-        treeNodeDemo.addNode(16);
-        treeNodeDemo.addNode(5);
-        treeNodeDemo.addNode(13);
-        treeNodeDemo.addNode(2);
-        treeNodeDemo.addNode(14);
+        testSearch();
+
+
+    }
+
+
+    /**
+     * 遍历demo
+     */
+    public static void testSearch() {
+        Tree tree = new Tree();
+        tree.addNode(10);
+        tree.addNode(7);
+        tree.addNode(8);
+        tree.addNode(16);
+        tree.addNode(5);
+        tree.addNode(13);
+        tree.addNode(2);
+        tree.addNode(14);
         List<Integer> list = new LinkedList<>();
-        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 0);
+        deepOrderSearch(tree.root, list, 0);
         System.out.println("前序遍历：" + list);
         list.clear();
-        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 1);
+        deepOrderSearch(tree.root, list, 1);
         System.out.println("中序遍历：" + list);
         list.clear();
-        treeNodeDemo.deepOrderSearch(treeNodeDemo.root, list, 2);
+        deepOrderSearch(tree.root, list, 2);
         System.out.println("后序遍历：" + list);
         list.clear();
-        treeNodeDemo.breadFirstOrderSearch(treeNodeDemo.root, list);
+        tree.breadFirstOrderSearch(tree.root, list);
         System.out.println("广度优先遍历：" + list);
         list.clear();
-        System.out.println(treeNodeDemo.toString());
-
-
+        System.out.println(tree.toString());
     }
 
 
