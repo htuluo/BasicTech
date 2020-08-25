@@ -88,6 +88,5 @@ public class SubTree {
         tree2.addNode(8);
 
         System.out.println(isSubTree(tree, tree2));
-        System.out.println(tree.toString());
     }
 }

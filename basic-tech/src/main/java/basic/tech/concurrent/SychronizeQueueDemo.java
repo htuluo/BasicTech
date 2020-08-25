@@ -14,6 +14,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class SychronizeQueueDemo {
     public static void main(String[] args) {
+        System.out.println(Math.round(1.5f));
         System.out.println(Math.round(-1.5f));
     }
 
