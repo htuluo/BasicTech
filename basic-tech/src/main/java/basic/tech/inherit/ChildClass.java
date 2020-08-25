@@ -48,7 +48,8 @@ public class ChildClass extends ParentClass {
         ChildClass childClass = new ChildClass();
         childClass.parentProtectStr="ddd";
         childClass.parentDefaultStr="aaa";
-        System.out.println(childClass.parentProtectStr);
+//        childClass=new ChildClass();
+//        System.out.println(childClass.parentProtectStr);
 //        System.out.println(childClass.getParentInteger());
 //        System.out.println(childClass.getSameInteger());
         // System.out.println(sChildClass.getParentInteger());
