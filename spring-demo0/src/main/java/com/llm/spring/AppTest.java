@@ -20,7 +20,7 @@ public class AppTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         context.getBean(X.class);
         User user = context.getBean(User.class);
-//        context.registerShutdownHook();
+        context.registerShutdownHook();
         System.out.println("OK");
         ConstructClass instance = context.getBean(ConstructClass.class);
         instance.method();
