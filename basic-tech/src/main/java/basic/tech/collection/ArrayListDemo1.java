@@ -1,9 +1,6 @@
 package basic.tech.collection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -17,8 +14,21 @@ public class ArrayListDemo1 {
     private static List<String> list=new CopyOnWriteArrayList<>();// Collections.synchronizedList(new ArrayList<String>());// new ArrayList<String>();
 
     public static void main(String[] args) {
-        arrayListTest();
-        System.out.println(list);
+        setToArraylist();
+//        arrayListTest();
+//        System.out.println(list);
+    }
+
+    /**
+     * set转ArrayList
+     */
+    private static void setToArraylist() {
+        Set<String> set=new HashSet<>();
+        set.add("aa");
+        set.add("bb");
+        set.add("cc");
+        ArrayList<String> strings = new ArrayList<>(set);
+        System.out.println(strings.toString());
     }
 
     /**
@@ -37,4 +47,5 @@ public class ArrayListDemo1 {
             },String.valueOf(i)).start();
         }
     }
+
 }
