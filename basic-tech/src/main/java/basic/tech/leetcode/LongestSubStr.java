@@ -34,7 +34,7 @@ public class LongestSubStr {
     }
 
     /**
-     * 最长子串，不含重复字符
+     * 不含重复字符最长子串，
      * @param str
      * @return
      */

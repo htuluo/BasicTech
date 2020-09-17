@@ -153,7 +153,7 @@ public class DBScanTest3 {
         cs.add(customerPoint1);
         cs.add(customerPoint);
 //这里第一个参数为距离，第二个参数为最小邻居数量
-        DBScanTest3 db = new DBScanTest3(1.5, 1);
+        DBScanTest3 db = new DBScanTest3(1.5, 2);
 //返回结果并打印
         List<List<CustomerPoint>> aa = db.cluster(cs);
         for (int i = 0; i < aa.size(); i++) {
