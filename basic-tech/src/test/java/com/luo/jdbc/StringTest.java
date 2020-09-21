@@ -9,10 +9,16 @@ import org.junit.Test;
  */
 public class StringTest {
     @Test
-    public void test1(){
+    public void test1() {
         String str = "abc@123.com";
         int x = str.indexOf("@");
-        System.out.println(x);
+        System.out.println(str.substring(0, x));
         System.out.println(str.substring(x));
+    }
+
+    @Test
+    public void test2() {
+        Double d = Double.valueOf("0d");
+        System.out.println(d == 0);
     }
 }
