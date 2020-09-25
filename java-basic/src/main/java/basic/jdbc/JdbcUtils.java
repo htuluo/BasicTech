@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -137,6 +139,49 @@ public class JdbcUtils {
 
         } finally {
             JdbcUtils.closeConnection(connection, statement, resultSet);
+        }
+        return null;
+    }
+
+    /**
+     * 泛型返回查询结果集
+     *
+     * @param clazz
+     * @param sql
+     * @param objects
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> selectQueryList(PreparedStatement statement, Class<T> clazz, String sql, Object... objects) {
+        ResultSet resultSet = null;
+        List<T> list = new ArrayList<>();
+        try {
+            for (int i = 0; i < objects.length; i++) {
+                statement.setObject(i + 1, objects[i]);
+            }
+            resultSet = statement.executeQuery();
+            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+            while (resultSet.next()) {
+                T instance = clazz.newInstance();
+                for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
+                    Object columnValue = resultSet.getObject(i + 1);
+                    String columnName = resultSetMetaData.getColumnLabel(i + 1);
+//                    String columnName = resultSetMetaData.getColumnName(i+1);
+                    Field declaredField = clazz.getDeclaredField(columnName);
+                    if (declaredField.getGenericType().toString().contains("java.lang.Integer")) {
+                        columnValue = resultSet.getInt(i + 1);
+                    }
+                    declaredField.setAccessible(true);
+                    declaredField.set(instance, columnValue);
+                }
+                list.add(instance);
+            }
+            return list;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            System.out.println("0000000");
+        } finally {
         }
         return null;
     }
