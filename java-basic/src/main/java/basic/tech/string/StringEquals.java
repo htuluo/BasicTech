@@ -27,7 +27,9 @@ public class StringEquals {
     public static void main(String[] args) {
         String str0="asdasd  asdf  kkkk llll    mm";
         String[] s = str0.split(" ");
+        String[] s2 = str0.split("，");
         System.out.println(s);
+        System.out.println(s2);
         String bStr =new String( "e1ae617c1e9d45018638e6e8b59bf508");
         Entity entity=(new StringEquals()).new Entity("e1ae617c1e9d45018638e6e8b59bf508");
         System.out.println(entity.getaStr()== bStr);
