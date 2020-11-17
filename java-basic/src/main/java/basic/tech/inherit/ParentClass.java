@@ -1,8 +1,11 @@
 package basic.tech.inherit;
 
+import lombok.Data;
+
 /**
  * 演示父子类的实例化顺序及过程
  */
+@Data
 public class ParentClass {
     private Integer parentInteger=1;
     private Integer sameInteger = 5;
@@ -21,25 +24,6 @@ public class ParentClass {
     }
     {
         System.out.println("Parent init" + this.sameInteger+" this.parent.hashcode="+this.hashCode());
-    }
-
-
-
-
-    public Integer getSameInteger() {
-        return sameInteger;
-    }
-
-    public void setSameInteger(Integer sameInteger) {
-        this.sameInteger = sameInteger;
-    }
-
-    public Integer getParentInteger() {
-        return parentInteger;
-    }
-
-    public void setParentInteger(Integer parentInteger) {
-        this.parentInteger = parentInteger;
     }
 
 

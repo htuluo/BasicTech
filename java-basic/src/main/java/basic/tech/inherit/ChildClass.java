@@ -1,5 +1,8 @@
 package basic.tech.inherit;
 
+import lombok.Data;
+
+@Data
 public class ChildClass extends ParentClass {
     private Integer childInteger;
     private Integer sameInteger = 12;
@@ -29,14 +32,6 @@ public class ChildClass extends ParentClass {
         this.sameInteger = sameInteger;
     }
 
-    public Integer getChildInteger() {
-        return childInteger;
-    }
-
-    public void setChildInteger(Integer childInteger) {
-        this.childInteger = childInteger;
-    }
-
     @Override
     public void printInfo() {
 
@@ -45,9 +40,11 @@ public class ChildClass extends ParentClass {
 
     public static void main(String[] args) {
 
-        ChildClass childClass = new ChildClass();
-        childClass.parentProtectStr="ddd";
-        childClass.parentDefaultStr="aaa";
+        ParentClass parentClass = new ParentClass();
+        parentClass.setParentDefaultStr("aaa");
+        ChildClass childClass = (ChildClass) parentClass;
+        System.out.println(childClass.getParentDefaultStr());
+
 //        childClass=new ChildClass();
 //        System.out.println(childClass.parentProtectStr);
 //        System.out.println(childClass.getParentInteger());
