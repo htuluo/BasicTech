@@ -32,6 +32,7 @@ public class HashMapTest {
                 }
             });
         }
+
         newFixedThreadPool.awaitTermination(1, TimeUnit.SECONDS);
         newFixedThreadPool.shutdown();
 
