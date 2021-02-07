@@ -28,6 +28,9 @@ public class RegexTest {
         System.out.println(text);
     }
 
+    /**
+     * 有问题的替换
+     */
     public static void replaceRegex() {
         String text = "11&&1&&2&&111";
         String regex = "\\d+";
