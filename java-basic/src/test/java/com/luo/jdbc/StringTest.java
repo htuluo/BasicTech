@@ -117,4 +117,34 @@ public class StringTest {
 
     }
 
+    @Test
+    public void test7() throws IOException {
+        String tmpExpress = "2&&&&";
+        boolean stringFoundTwice = isStringFoundTwice(tmpExpress, "&");
+        System.out.println(stringFoundTwice);
+        System.out.println("结束");
+
+    }
+
+    /**
+     * 校验字符是否成对出现
+     * @param wholeString
+     * @param findStr
+     * @return
+     */
+    private boolean isStringFoundTwice(String wholeString, String findStr) {
+        String str2 = findStr + findStr;
+        int fromIndex = 0;
+        int index = wholeString.indexOf(findStr, fromIndex);
+        while (fromIndex < wholeString.length() && index != -1) {
+            int index2 = wholeString.indexOf(str2, fromIndex);
+            if (index != index2) {
+                return false;
+            }
+            fromIndex = index + 2;
+            index = wholeString.indexOf(findStr, fromIndex);
+        }
+        return true;
+    }
+
 }
