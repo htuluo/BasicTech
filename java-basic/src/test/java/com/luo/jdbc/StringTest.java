@@ -81,8 +81,8 @@ public class StringTest {
 
     /**
      * 1000000次
-     *encode:254
-     *string byte:116
+     * encode:254
+     * string byte:116
      * 图片文件byte
      * encode:3058
      * string byte:12935
@@ -126,8 +126,19 @@ public class StringTest {
 
     }
 
+    @Test
+    public void test8() throws IOException {
+        String tmpExpress = "20,30,40,2020";
+        Integer tmp = 20;
+        Optional<String> first = Arrays.stream(tmpExpress.split(",")).filter(item -> item.equals(tmp.toString())).findFirst();
+        System.out.println(first.isPresent());
+        System.out.println(first.isPresent() ? first.get() : "null");
+
+    }
+
     /**
      * 校验字符是否成对出现
+     *
      * @param wholeString
      * @param findStr
      * @return
