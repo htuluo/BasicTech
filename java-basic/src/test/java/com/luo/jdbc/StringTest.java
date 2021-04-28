@@ -136,6 +136,14 @@ public class StringTest {
 
     }
 
+    @Test
+    public void test9() throws IOException {
+        String tmpExpress = "m_min_alalsd";
+
+        System.out.println(tmpExpress.substring(0,tmpExpress.lastIndexOf("_")+1));
+
+    }
+
     /**
      * 校验字符是否成对出现
      *
