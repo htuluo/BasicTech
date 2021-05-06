@@ -3,6 +3,7 @@ package com.luo.jdbc;
 import com.sun.javafx.iio.ImageStorage;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tools.ant.util.FileUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.imageio.ImageIO;
@@ -164,6 +165,11 @@ public class StringTest {
             index = wholeString.indexOf(findStr, fromIndex);
         }
         return true;
+    }
+
+    @Test
+    public void test10(){
+        Assert.assertNotEquals(0l,0l);
     }
 
 }

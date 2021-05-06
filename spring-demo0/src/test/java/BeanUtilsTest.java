@@ -2,6 +2,7 @@ import com.llm.spring.dto.LoginThirdResponse;
 import com.llm.spring.dto.ThirdLoginBindMobileWithRegistResponse;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 
 /**
  * @author ： luoleiming
@@ -19,5 +20,11 @@ public class BeanUtilsTest {
         loginThirdResponse.setCustid_child(custid_child);
         BeanUtils.copyProperties(loginThirdResponse, thirdLoginBindMobileWithRegistResponse);
         System.out.println(thirdLoginBindMobileWithRegistResponse.getCustid_child());
+    }
+
+    @Test
+    public void test2(){
+        Assert.isNull("ss","lkl");
+        Assert.isTrue(true,"yes it is true");
     }
 }
