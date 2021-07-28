@@ -141,7 +141,7 @@ public class StringTest {
     public void test9() throws IOException {
         String tmpExpress = "m_min_alalsd";
 
-        System.out.println(tmpExpress.substring(0,tmpExpress.lastIndexOf("_")+1));
+        System.out.println(tmpExpress.substring(0, tmpExpress.lastIndexOf("_") + 1));
 
     }
 
@@ -168,8 +168,25 @@ public class StringTest {
     }
 
     @Test
-    public void test10(){
-        Assert.assertNotEquals(0l,0l);
+    public void test10() {
+//        Assert.assertNotEquals(0l, 0l);
+        Set<String> id = new HashSet<>();
+        id.add("100");
+        id.add("200");
+        System.out.println(String.join(",", id).toString());
     }
+
+    @Test
+    public void test11() throws IOException {
+        String tmpExpress = "";
+        Integer tmp = 20;
+        List<String> list = Arrays.asList(tmpExpress.split(","));
+        System.out.println(list.contains("ccb"));
+        Optional<String> first = Arrays.stream(tmpExpress.split(",")).filter(item -> item.equals(tmp.toString())).findFirst();
+        System.out.println(first.isPresent());
+        System.out.println(first.isPresent() ? first.get() : "null");
+
+    }
+
 
 }
