@@ -188,5 +188,16 @@ public class StringTest {
 
     }
 
+    @Test
+    public void test12() throws IOException {
+        Set<String> a=new LinkedHashSet<>();
+        a.add("a");
+        a.add("b");
+        a.add("c");
+        a.add("c");
+
+        System.out.println(a.toString());
+
+    }
 
 }
