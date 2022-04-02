@@ -3,6 +3,7 @@ package com.luo.jdbc;
 import com.google.common.base.Stopwatch;
 import org.apache.commons.lang3.ThreadUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -46,6 +47,39 @@ public class TimeTest {
         Thread.sleep(5012);
         stopWatch.stop();
         System.out.println(stopWatch.elapsed(TimeUnit.MILLISECONDS));
+
+    }
+
+    @Test
+    public void test3() throws InterruptedException {
+
+        StopWatch stopWatch= new StopWatch();
+        stopWatch.start();
+        TimeUnit.SECONDS.sleep(1);
+
+        stopWatch.split();
+        System.out.println(stopWatch.getSplitTime());
+        TimeUnit.MILLISECONDS.sleep(500);
+        stopWatch.split();
+        System.out.println(stopWatch.getSplitTime());
+
+        stopWatch.stop();
+        System.out.println("cost time:"+stopWatch.getTime());
+        stopWatch.reset();
+        stopWatch.start();
+        Thread.sleep(2012);
+        stopWatch.suspend();
+        System.out.println(stopWatch.getTime());
+        System.out.println(stopWatch.getTime(TimeUnit.SECONDS));
+        stopWatch.resume();
+        Thread.sleep(100);
+        stopWatch.split();
+        System.out.println("split:"+stopWatch.getSplitTime());
+        Thread.sleep(3000);
+        stopWatch.split();
+        System.out.println("split:"+stopWatch.getSplitTime());
+        stopWatch.stop();
+        System.out.println(stopWatch.getTime(TimeUnit.MILLISECONDS));
 
     }
 }
