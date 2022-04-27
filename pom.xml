@@ -34,6 +34,7 @@
         <module>boot-sercurity</module>
         <module>spring-demo0</module>
         <module>kafka-demo</module>
+        <module>redis-demo</module>
     </modules>
     <dependencies>
     </dependencies>
