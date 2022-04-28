@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1)
 @Threads(20)
 @State(Scope.Benchmark)
-@Measurement(iterations = 10, time = 6000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 10, time = 60000, timeUnit = TimeUnit.MILLISECONDS)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class LettuceJmhTest {
     private RedisClusterClient redisClusterClient;
