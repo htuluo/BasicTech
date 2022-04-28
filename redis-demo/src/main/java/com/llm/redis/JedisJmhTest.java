@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1)
 @Threads(20)
 @State(Scope.Benchmark)
-@Measurement(iterations = 10, time = 60000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 5, time = 6000, timeUnit = TimeUnit.MILLISECONDS)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class JedisJmhTest {
     private JedisCluster jedisCluster;
@@ -35,20 +35,21 @@ public class JedisJmhTest {
         jedisPoolConfig.setMinIdle(2);
         jedisPoolConfig.setMaxWaitMillis(3000);
         Set<HostAndPort> hostAndPorts = new HashSet<>();
-        hostAndPorts.add(new HostAndPort("10.255.209.32", 8381));
-        hostAndPorts.add(new HostAndPort("10.255.209.36", 8381));
-        hostAndPorts.add(new HostAndPort("10.255.209.37", 8381));
-        jedisCluster=new JedisCluster(hostAndPorts,jedisPoolConfig);
+        String redisHostPorts = "10.255.209.32:8381,10.255.209.36:8381,10.255.209.37:8381,10.255.209.32:8382,10.255.209.36:8382,10.255.209.37:8382";
+        for (String hostPort : redisHostPorts.split(",")) {
+            hostAndPorts.add(new HostAndPort(hostPort.split(":")[0], Integer.parseInt(hostPort.split(":")[1])));
+        }
+        jedisCluster = new JedisCluster(hostAndPorts, jedisPoolConfig);
 
     }
 
     @Benchmark
-    public void get(){
-        jedisCluster.get("a");
+    public void get() {
+//        System.out.println(jedisCluster.get("alliance:risk:custid:184951018"));
     }
 
     public static void main(String[] args) throws RunnerException {
-        Options options=new OptionsBuilder()
+        Options options = new OptionsBuilder()
                 .include(JedisJmhTest.class.getSimpleName())
                 .forks(1)
                 .output("/var/www/jedis-test.log")

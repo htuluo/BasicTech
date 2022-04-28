@@ -20,30 +20,35 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 1)
 @Threads(20)
 @State(Scope.Benchmark)
-@Measurement(iterations = 10, time = 60000, timeUnit = TimeUnit.MILLISECONDS)
+@Measurement(iterations = 5, time = 6000, timeUnit = TimeUnit.MILLISECONDS)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class LettuceJmhTest {
     private RedisClusterClient redisClusterClient;
-    private StatefulRedisClusterConnection<String,String> connection;
+    private StatefulRedisClusterConnection<String, String> connection;
+
     @Setup
-    public void setup(){
-        redisClusterClient=RedisClusterClient.create("redis://10.255.209.32:8381,10.255.209.36:8381,10.255.209.37:8381,10.255.209.32:8382,10.255.209.36:8382,10.255.209.37:8382");
-        connection=redisClusterClient.connect();
+    public void setup() {
+        System.out.println("setup---------");
+        redisClusterClient = RedisClusterClient.create("redis://10.255.209.32:8381,10.255.209.36:8381,10.255.209.37:8381,10.255.209.32:8382,10.255.209.36:8382,10.255.209.37:8382");
+        connection = redisClusterClient.connect();
     }
+
     @Benchmark
-    public void get(){
+    public void get() {
         RedisAdvancedClusterCommands<String, String> commands = connection.sync();
-        System.out.println(commands.get("a"));
+        commands.get("a");
+//        System.out.println(commands.get("alliance:risk:custid:184951018"));
     }
+
     @TearDown
-    public void tearDown(){
+    public void tearDown() {
         connection.close();
         redisClusterClient.shutdown();
     }
 
     public static void main(String[] args) throws RunnerException {
-        Options options=new OptionsBuilder()
-                .include(JedisJmhTest.class.getSimpleName())
+        Options options = new OptionsBuilder()
+                .include(LettuceJmhTest.class.getSimpleName())
                 .forks(1)
                 .output("/var/www/lettuce-test.log")
                 .build();
