@@ -13,7 +13,7 @@ public class MultiThreadCalculator implements Calculator {
     private final int nThreads;
     private final ExecutorService pool;
 
-    public MultiThreadCalculator(int nThreads, ExecutorService pool) {
+    public MultiThreadCalculator(int nThreads) {
         this.nThreads = nThreads;
         this.pool = Executors.newFixedThreadPool(nThreads);
     }
