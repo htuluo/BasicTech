@@ -8,8 +8,10 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,6 +33,30 @@ public class TimeTest {
         System.out.println(sdf3.format(date));
     }
 
+    @Test
+    public void timeZonetest1() throws ParseException {
+
+        Calendar calendar=Calendar.getInstance();
+        System.out.println(calendar.getTime());
+        int dstOffset = calendar.get(Calendar.DST_OFFSET);
+        calendar.add(Calendar.MILLISECOND,-(calendar.get(Calendar.ZONE_OFFSET)+dstOffset));
+        System.out.println("utc:"+calendar.getTime());
+        System.out.println("utc:"+new Date(calendar.getTimeInMillis()));
+//        calendar.add(Calendar.HOUR,8);
+//        System.out.println(calendar.getTime());
+//        System.out.println(calendar.getTimeZone());
+//        Calendar calendar1 = Calendar.getInstance(TimeZone.getDefault());
+//        System.out.println(calendar1.getTime());
+//        Calendar calendar2 = Calendar.getInstance(TimeZone.getTimeZone("GMT-8:00"));
+//        System.out.println(calendar2.getTime());
+//        System.out.println("year:"+calendar2.get(Calendar.YEAR));
+//        System.out.println(calendar2.get(Calendar.MONTH));
+//        System.out.println(calendar2.get(Calendar.DATE));
+//        System.out.println(calendar2.get(Calendar.HOUR_OF_DAY));
+//        System.out.println(calendar2.get(Calendar.MINUTE));
+//        System.out.println("hour:"+calendar1.get(Calendar.HOUR_OF_DAY));
+//
+    }
     @Test
     public void test2() throws InterruptedException {
 

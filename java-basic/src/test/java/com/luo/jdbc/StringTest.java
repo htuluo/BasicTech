@@ -1,6 +1,7 @@
 package com.luo.jdbc;
 
 import com.sun.javafx.iio.ImageStorage;
+import org.apache.commons.lang3.ThreadUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.tools.ant.util.FileUtils;
 import org.junit.Assert;
@@ -197,6 +198,24 @@ public class StringTest {
         a.add("c");
 
         System.out.println(a.toString());
+
+    }
+
+    @Test
+    public void testCostTime() throws IOException, InterruptedException {
+        StopWatch stopWatch=new StopWatch();
+        stopWatch.start();
+        Thread.sleep(303);
+        stopWatch.split();
+        System.out.println("cost time 1,cost:"+stopWatch.getSplitTime());
+        Thread.sleep(404);
+        stopWatch.split();
+        System.out.println("cost time 2,cost:"+stopWatch.getSplitTime());
+        Thread.sleep(504);
+        stopWatch.split();
+        System.out.println("cost time 3,cost:"+stopWatch.getSplitTime());
+        System.out.println("cost all time:"+stopWatch.getTime());
+
 
     }
 
