@@ -3,6 +3,7 @@ import com.llm.spring.dto.ThirdLoginBindMobileWithRegistResponse;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.StopWatch;
 
 /**
  * @author ： luoleiming
@@ -23,8 +24,20 @@ public class BeanUtilsTest {
     }
 
     @Test
-    public void test2(){
-        Assert.isNull("ss","lkl");
-        Assert.isTrue(true,"yes it is true");
+    public void test2() {
+        Assert.isNull("ss", "lkl");
+        Assert.isTrue(true, "yes it is true");
+    }
+
+    @Test
+    public void test3() throws InterruptedException {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("aabb");
+        Thread.sleep(550);
+        stopWatch.stop();
+        stopWatch.start("ccc");
+        Thread.sleep(250);
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
     }
 }

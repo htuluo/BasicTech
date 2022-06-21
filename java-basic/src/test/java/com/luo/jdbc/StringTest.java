@@ -1,5 +1,6 @@
 package com.luo.jdbc;
 
+import com.google.common.base.Stopwatch;
 import com.sun.javafx.iio.ImageStorage;
 import org.apache.commons.lang3.ThreadUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -13,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ： luolm
@@ -215,6 +217,22 @@ public class StringTest {
         stopWatch.split();
         System.out.println("cost time 3,cost:"+stopWatch.getSplitTime());
         System.out.println("cost all time:"+stopWatch.getTime());
+
+
+    }
+
+    @Test
+    public void testStopWatchTime() throws IOException, InterruptedException {
+        Stopwatch stopWatch=Stopwatch.createStarted();
+        Thread.sleep(303);
+        System.out.println("cost time 1,cost:"+stopWatch.elapsed());
+        stopWatch.reset();
+        stopWatch.start();
+        Thread.sleep(404);
+        System.out.println("cost time 2,cost:"+stopWatch.elapsed(TimeUnit.MILLISECONDS));
+        Thread.sleep(504);
+        stopWatch.stop();
+        System.out.println("cost time 3,cost:"+stopWatch.elapsed(TimeUnit.MILLISECONDS));
 
 
     }
