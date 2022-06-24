@@ -161,10 +161,16 @@ public class StringDistanceUtils {
         return ((float) p1) / (p2 * p3);
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        System.out.println(StringDistanceUtils.jaccard("中化人民解放军", "中国人民解放战争"));
-        System.out.println(StringDistanceUtils.SorensenDice("中化人民解放军", "中国人民解放战争"));
-        System.out.println(StringDistanceUtils.editDis("中化人民解放军", "中国人民解放战争"));
-        System.out.println(StringDistanceUtils.hamming("中化人民解放军", "中国人民解放战争"));
+
+        System.out.println(StringDistanceUtils.jaccard("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+        System.out.println(StringDistanceUtils.SorensenDice("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+        System.out.println(StringDistanceUtils.editDis("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+        System.out.println(StringDistanceUtils.hamming("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990adfasdfasds"));
+        System.out.println(StringDistanceUtils.cos("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
     }
 }
