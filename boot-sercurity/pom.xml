@@ -11,7 +11,7 @@
 
     <artifactId>boot-sercurity</artifactId>
     <properties>
-        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.5.12</spring.boot.version>
 
         <slf4j-api.version>1.8.0-beta2</slf4j-api.version>
     </properties>
