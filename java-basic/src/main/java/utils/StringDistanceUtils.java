@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  *@date: 2022/6/23 16:40
  *@description: 字符串相似度计算：参考https://juejin.cn/post/6844903992812634119
  */
+
 public class StringDistanceUtils {
     public static float jaccard(String a, String b) {
         if (a == null && b == null) {
@@ -111,7 +112,7 @@ public class StringDistanceUtils {
     /**
      * @param a
      * @param b
-     * @return
+     * @return 余弦相似度，没有分词操作
      */
     public static float cos(String a, String b) {
         if (a == null || b == null) {
@@ -123,10 +124,12 @@ public class StringDistanceUtils {
         // 统计字频
         Map<Integer, Integer> aMap = new HashMap<>();
         Map<Integer, Integer> bMap = new HashMap<>();
-        for (Integer a1 : aChar) {
+        List<Integer> aList = a.chars().boxed().collect(Collectors.toList());
+        List<Integer> bList = b.chars().boxed().collect(Collectors.toList());
+        for (Integer a1 : aList) {
             aMap.put(a1, aMap.getOrDefault(a1, 0) + 1);
         }
-        for (Integer b1 : bChar) {
+        for (Integer b1 : bList) {
             bMap.put(b1, bMap.getOrDefault(b1, 0) + 1);
         }
 
@@ -162,15 +165,30 @@ public class StringDistanceUtils {
     }
 
     /**
-     *
      * @param args
      */
-    public static void main(String[] args) {
-
-        System.out.println(StringDistanceUtils.jaccard("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
-        System.out.println(StringDistanceUtils.SorensenDice("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
-        System.out.println(StringDistanceUtils.editDis("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
-        System.out.println(StringDistanceUtils.hamming("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990adfasdfasds"));
-        System.out.println(StringDistanceUtils.cos("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
-    }
+//    public static void main(String[] args) throws RunnerException {
+//        Options options = new OptionsBuilder().include(StringDistanceUtils.class.getSimpleName())
+//                //启动几个进程测试
+//                .forks(2)
+//                //预热次数
+//                .warmupIterations(5)
+//                //实际迭代次数
+//                .measurementIterations(5)
+//                .build();
+//        new Runner(options).run();
+////        StopWatch stopWatch=new StopWatch();
+////        stopWatch.start();
+////        for (int i = 0; i < 1000; i++) {
+////
+////            float jaccard = StringDistanceUtils.jaccard("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990");
+////        }
+////        stopWatch.stop();
+////
+////        System.out.println("jaccard");
+////        System.out.println(StringDistanceUtils.SorensenDice("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+////        System.out.println(StringDistanceUtils.editDis("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+////        System.out.println(StringDistanceUtils.hamming("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990adfasdfasds"));
+////        System.out.println(StringDistanceUtils.cos("北城世纪城冠徽苑6栋（张义18055152990）", "北城世纪城冠徽苑6栋1601  张义  18055152990"));
+//    }
 }
