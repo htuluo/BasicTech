@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import basic.jdbc.JdbcUtils;
 import basic.jdbc.UserEntity;
@@ -8,10 +8,7 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.sql.*;
-import java.time.temporal.TemporalUnit;
-import java.util.Arrays;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @description:

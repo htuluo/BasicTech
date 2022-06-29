@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import basic.tech.inherit.Child2Class;
 import basic.tech.inherit.ParentClass;

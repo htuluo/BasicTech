@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import basic.jdbc.JdbcUtils;
 import basic.jdbc.UserDao;

@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import com.google.common.base.Stopwatch;
 import com.sun.javafx.iio.ImageStorage;

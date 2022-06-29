@@ -30,7 +30,7 @@ public class StringDistanceUtils {
         return ((float) intersection) / (float) union;
     }
 
-    public static float SorensenDice(String a, String b) {
+    public static float sorensenDice(String a, String b) {
         if (a == null && b == null) {
             return 1f;
         }
@@ -50,7 +50,7 @@ public class StringDistanceUtils {
         return (2 * (float) intersect) / ((float) (aSize + bSize));
     }
 
-    public static float Levenshtein(String a, String b) {
+    public static float levenshtein(String a, String b) {
         if (a == null && b == null) {
             return 1f;
         }

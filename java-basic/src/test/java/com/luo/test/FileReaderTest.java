@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import org.junit.Test;
 

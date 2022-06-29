@@ -1,4 +1,4 @@
-package com.luo.jdbc;
+package com.luo.test;
 
 import com.google.common.base.Stopwatch;
 import org.apache.commons.lang3.ThreadUtils;
@@ -37,8 +37,16 @@ public class TimeTest {
     public void timeZonetest1() throws ParseException {
 
         Calendar calendar=Calendar.getInstance();
+        calendar.set(Calendar.HOUR,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
         System.out.println(calendar.getTime());
         int dstOffset = calendar.get(Calendar.DST_OFFSET);
+        calendar=Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(calendar.getTime())+ " 00:00:00";
+        System.out.println(format);
         calendar.add(Calendar.MILLISECOND,-(calendar.get(Calendar.ZONE_OFFSET)+dstOffset));
         System.out.println("utc:"+calendar.getTime());
         System.out.println("utc:"+new Date(calendar.getTimeInMillis()));
