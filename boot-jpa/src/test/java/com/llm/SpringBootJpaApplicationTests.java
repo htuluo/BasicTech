@@ -52,7 +52,7 @@ public class SpringBootJpaApplicationTests
     {
         int page=0;
         int size=2;
-        Pageable pageable=new PageRequest(page,size);
+        Pageable pageable= PageRequest.of(page,size);
         Page<User> userPage = userRepository.search(null, null, null, pageable);
         System.out.println(JSON.toJSON(userPage));
         assertTrue( true );

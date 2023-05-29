@@ -33,6 +33,7 @@
         <module>boot-jpa</module>
         <module>boot-sercurity</module>
         <module>spring-demo0</module>
+        <module>spring-demo</module>
         <module>kafka-demo</module>
         <module>redis-demo</module>
         <module>drools-demo</module>
