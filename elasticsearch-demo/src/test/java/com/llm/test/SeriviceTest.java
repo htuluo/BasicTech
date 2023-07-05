@@ -17,4 +17,8 @@ public class SeriviceTest {
     public void testSave() {
         service.save();
     }
+    @Test
+    public void testUpdate() {
+        service.update();
+    }
 }
