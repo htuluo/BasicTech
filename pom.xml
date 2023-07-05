@@ -37,6 +37,7 @@
         <module>kafka-demo</module>
         <module>redis-demo</module>
         <module>drools-demo</module>
+        <module>elasticsearch-demo</module>
     </modules>
     <dependencies>
     </dependencies>
