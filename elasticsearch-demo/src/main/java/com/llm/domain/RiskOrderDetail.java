@@ -3,8 +3,10 @@ package com.llm.domain;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.WriteTypeHint;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,7 +18,8 @@ import java.math.BigDecimal;
  * @date 2022-02-11 17:25
  */
 @Data
-@Document(indexName = "risk_order_detail")
+@Document(indexName = "risk_order_detail",writeTypeHint = WriteTypeHint.FALSE)
+@TypeAlias("risk_order_detail")
 public class RiskOrderDetail implements Serializable {
 
     private static final long serialVersionUID = -4485279311323670778L;

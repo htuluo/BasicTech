@@ -17,8 +17,8 @@ public class RiskOrderService {
 
     public void save(){
         RiskOrderDetail orderDetail = new RiskOrderDetail();
-        orderDetail.setId("222000");
-        orderDetail.setOrderId(222000L);
+        orderDetail.setId("222005");
+        orderDetail.setOrderId(222005L);
         orderDetail.setOrderIp("127.0.0.1");
         orderDetail.setOrderIsFlag(56);
         orderDetail.setOrderStatus(900);

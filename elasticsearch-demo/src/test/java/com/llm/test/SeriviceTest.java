@@ -27,7 +27,7 @@ public class SeriviceTest {
     @Test
     public void testJsonParse() {
         RiskOrderDetail orderDetail = new RiskOrderDetail();
-        orderDetail.setId("222000");
+        orderDetail.setId("222003");
         orderDetail.setOrderId(222000L);
         orderDetail.setOrderIp("127.0.0.1");
         orderDetail.setOrderIsFlag(56);
@@ -35,7 +35,7 @@ public class SeriviceTest {
         orderDetail.setOrderStatus(100);
         String jsonStr = JSONObject.toJSONString(orderDetail);
         System.out.println(jsonStr);
-        String json2="{\"id\":\"222000\",\"orderId\":222000,\"orderIp\":\"127.0.0.1\",\"orderIsFlag\":56,\"orderStatus\":100}";
+        String json2="{\"id\":\"222003\",\"orderId\":222003,\"orderIp\":\"127.0.0.1\",\"orderIsFlag\":56,\"orderStatus\":100}";
         ParserConfig config=new ParserConfig(false);
         config.setAsmEnable(false);
         config.setJacksonCompatible(true);
